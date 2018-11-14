@@ -20,7 +20,7 @@ public interface InterfaceServer extends Remote {
 
     String acquireSessionId(String username) throws RemoteException;
 
-    void createGame(ArrayList<String> gamePositions, String username) throws  RemoteException;
+    void createGame(ArrayList<String> gamePositions, String username) throws RemoteException;
 
     ArrayList<String> requestGames(String username) throws RemoteException;
 
@@ -28,11 +28,11 @@ public interface InterfaceServer extends Remote {
 
     void requestJoin(int gameId, String username) throws RemoteException;
 
-    boolean checkTurn(int gameId, String username) throws  RemoteException;
+    boolean checkTurn(int gameId, String username) throws RemoteException;
 
     ArrayList<String> requestGameConfig(int gameId) throws RemoteException;
 
-    void updateGame(int gameId, String username, String gamePositions, int score) throws  RemoteException;
+    void updateGame(int gameId, String username, String gamePositions, int score) throws RemoteException;
 
     String requestGameWinner(int gameId) throws RemoteException;
 }

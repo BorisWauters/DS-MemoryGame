@@ -31,22 +31,20 @@ import java.util.Random;
  * Specifically Revision 1.37 which has been unchanged in the past 18 months.
  * I have taken out the /dev/urandom stuff and simplified things to the point
  * where we can audit it to work out what might be broken.
+ *
  * @author Joe Walker [joe at getahead dot ltd dot uk]
  */
-public class IdGenerator
-{
+public class IdGenerator {
     /**
      * Seed the random number
      */
-    public IdGenerator()
-    {
+    public IdGenerator() {
         // Start with the current system time as a seed
         long seed = System.currentTimeMillis();
 
         // Also throw in the system identifier for 'this' from toString
         char[] entropy = toString().toCharArray();
-        for (int i = 0; i < entropy.length; i++)
-        {
+        for (int i = 0; i < entropy.length; i++) {
             //noinspection IntegerMultiplicationImplicitCastToLong
             long update = ((byte) entropy[i]) << ((i % 8) * 8);
             seed ^= update;
@@ -57,41 +55,33 @@ public class IdGenerator
 
     /**
      * Generate and return a new session identifier.
+     *
      * @param length The number of bytes to generate
      * @return A new page id string
      */
-    public synchronized String generateId(int length)
-    {
+    public synchronized String generateId(int length) {
         byte[] buffer = new byte[length];
 
         // Render the result as a String of hexadecimal digits
         StringBuffer reply = new StringBuffer();
 
         int resultLenBytes = 0;
-        while (resultLenBytes < length)
-        {
+        while (resultLenBytes < length) {
             random.nextBytes(buffer);
             buffer = getDigest().digest(buffer);
 
-            for (int j = 0; j < buffer.length && resultLenBytes < length; j++)
-            {
+            for (int j = 0; j < buffer.length && resultLenBytes < length; j++) {
                 byte b1 = (byte) ((buffer[j] & 0xf0) >> 4);
-                if (b1 < 10)
-                {
+                if (b1 < 10) {
                     reply.append((char) ('0' + b1));
-                }
-                else
-                {
+                } else {
                     reply.append((char) ('A' + (b1 - 10)));
                 }
 
                 byte b2 = (byte) (buffer[j] & 0x0f);
-                if (b2 < 10)
-                {
+                if (b2 < 10) {
                     reply.append((char) ('0' + b2));
-                }
-                else
-                {
+                } else {
                     reply.append((char) ('A' + (b2 - 10)));
                 }
 
@@ -105,16 +95,14 @@ public class IdGenerator
     /**
      * @return the algorithm
      */
-    public synchronized String getAlgorithm()
-    {
+    public synchronized String getAlgorithm() {
         return algorithm;
     }
 
     /**
      * @param algorithm the algorithm to set
      */
-    public synchronized void setAlgorithm(String algorithm)
-    {
+    public synchronized void setAlgorithm(String algorithm) {
         this.algorithm = algorithm;
         digest = null;
     }
@@ -123,24 +111,17 @@ public class IdGenerator
      * Return the MessageDigest object to be used for calculating
      * session identifiers.  If none has been created yet, initialize
      * one the first time this method is called.
+     *
      * @return The hashing algorithm
      */
-    private MessageDigest getDigest()
-    {
-        if (digest == null)
-        {
-            try
-            {
+    private MessageDigest getDigest() {
+        if (digest == null) {
+            try {
                 digest = MessageDigest.getInstance(algorithm);
-            }
-            catch (NoSuchAlgorithmException ex)
-            {
-                try
-                {
+            } catch (NoSuchAlgorithmException ex) {
+                try {
                     digest = MessageDigest.getInstance(DEFAULT_ALGORITHM);
-                }
-                catch (NoSuchAlgorithmException ex2)
-                {
+                } catch (NoSuchAlgorithmException ex2) {
                     digest = null;
                     throw new IllegalStateException("No algorithms for IdGenerator");
                 }
@@ -157,8 +138,7 @@ public class IdGenerator
      */
     @SuppressWarnings({"EmptyMethod"})
     @Override
-    public final String toString()
-    {
+    public final String toString() {
         // This is to make the point that we need toString to return something
         // that includes some sort of system identifier as does the default.
         // Don't change this unless you really know what you are doing.

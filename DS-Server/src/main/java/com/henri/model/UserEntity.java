@@ -42,12 +42,12 @@ public class UserEntity {
     }
 
     @OneToOne//(cascade = CascadeType.ALL)
-    @JoinColumn(name="session_identifier_session_identifier_Id")
-    public SessionidentifierEntity getSessionIdentifierEntity(){
+    @JoinColumn(name = "session_identifier_session_identifier_Id")
+    public SessionidentifierEntity getSessionIdentifierEntity() {
         return sessionidentifierEntity;
     }
 
-    public void setSessionIdentifierEntity(SessionidentifierEntity s){
+    public void setSessionIdentifierEntity(SessionidentifierEntity s) {
         sessionidentifierEntity = s;
     }
 

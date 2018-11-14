@@ -37,7 +37,7 @@ public class MainDB implements CommandLineRunner {
 
 
     public static void main(String[] args) {
-       SpringApplication.run(MainDB.class, args);
+        SpringApplication.run(MainDB.class, args);
 
 
     }
@@ -46,11 +46,10 @@ public class MainDB implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Starting server");
         ServerMain main = new ServerMain();
-        main.startServer(userEntityRepository,sessionIdentifierRepository, gameRepository);
+        main.startServer(userEntityRepository, sessionIdentifierRepository, gameRepository);
 
 
     }
-
 
 
 }

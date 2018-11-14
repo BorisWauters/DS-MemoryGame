@@ -210,20 +210,20 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
     }
 
     @Override
-    public String requestGameWinner(int gameId) throws RemoteException{
+    public String requestGameWinner(int gameId) throws RemoteException {
         GameEntity gameEntity = gameRepository.findGameEntityByGameId(gameId);
         int scoreUserOne = (gameEntity.getUserOneScore());
         int scoreUserTwo = (gameEntity.getUserTwoScore());
         int scoreUserThree = (gameEntity.getUserThreeScore());
         int scoreUserFour = (gameEntity.getUserFourScore());
 
-        if(scoreUserOne > scoreUserTwo && scoreUserOne > scoreUserThree && scoreUserOne > scoreUserFour){
+        if (scoreUserOne > scoreUserTwo && scoreUserOne > scoreUserThree && scoreUserOne > scoreUserFour) {
             return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdOne()).getUsername();
-        }else if(scoreUserTwo > scoreUserOne && scoreUserTwo > scoreUserThree && scoreUserTwo > scoreUserFour){
+        } else if (scoreUserTwo > scoreUserOne && scoreUserTwo > scoreUserThree && scoreUserTwo > scoreUserFour) {
             return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdTwo()).getUsername();
-        }else if(scoreUserThree > scoreUserOne && scoreUserThree > scoreUserTwo && scoreUserThree > scoreUserFour){
+        } else if (scoreUserThree > scoreUserOne && scoreUserThree > scoreUserTwo && scoreUserThree > scoreUserFour) {
             return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdThree()).getUsername();
-        }else if(scoreUserFour > scoreUserOne && scoreUserFour > scoreUserThree && scoreUserFour > scoreUserThree){
+        } else if (scoreUserFour > scoreUserOne && scoreUserFour > scoreUserThree && scoreUserFour > scoreUserThree) {
             return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdFour()).getUsername();
         }
         return null;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 
 @Repository("GameRepository")
-public interface GameRepository  extends CrudRepository<GameEntity,Integer> {
+public interface GameRepository extends CrudRepository<GameEntity, Integer> {
 
     @Query("select g from GameEntity g where g.userEntity.userId = :userId or g.userIdOne = :userId or g.userIdTwo = :userId or g.userIdThree = :userId or g.userIdFour = :userId")
     ArrayList<GameEntity> findGameEntityByUserId(@Param("userId") int userId);

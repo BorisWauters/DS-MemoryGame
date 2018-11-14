@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository("UserEntityRepository")
-public interface UserEntityRepository extends CrudRepository<UserEntity,Integer> {
+public interface UserEntityRepository extends CrudRepository<UserEntity, Integer> {
 
     //Custom queries
     /*@Query("select u from UserEntity u")

@@ -42,9 +42,13 @@ public class GameEntity {
 
     @Basic
     @Column(name = "game_size")
-    public int getGameSize(){return gameSize;}
+    public int getGameSize() {
+        return gameSize;
+    }
 
-    public void setGameSize(int i){this.gameSize = i;}
+    public void setGameSize(int i) {
+        this.gameSize = i;
+    }
 
     @Basic
     @Column(name = "game_name")
@@ -68,83 +72,131 @@ public class GameEntity {
 
     @Basic
     @Column(name = "game_theme")
-    public int getGameTheme(){return gameTheme;}
+    public int getGameTheme() {
+        return gameTheme;
+    }
 
-    public void setGameTheme(int i){gameTheme = i;}
+    public void setGameTheme(int i) {
+        gameTheme = i;
+    }
 
     @Basic
     @Column(name = "game_max_players")
-    public int getGameMaxPlayers(){return gameMaxPlayers;}
+    public int getGameMaxPlayers() {
+        return gameMaxPlayers;
+    }
 
-    public void setGameMaxPlayers(int i){gameMaxPlayers = i;}
+    public void setGameMaxPlayers(int i) {
+        gameMaxPlayers = i;
+    }
 
     @Basic
     @Column(name = "game_users")
-    public int getGameUsers(){return gameUsers;}
+    public int getGameUsers() {
+        return gameUsers;
+    }
 
-    public void setGameUsers(int i){this.gameUsers = i;}
+    public void setGameUsers(int i) {
+        this.gameUsers = i;
+    }
 
     @Basic
     @Column(name = "user_id_one")
-    public int getUserIdOne(){return userIdOne;}
+    public int getUserIdOne() {
+        return userIdOne;
+    }
 
-    public void setUserIdOne(int i){this.userIdOne = i;}
+    public void setUserIdOne(int i) {
+        this.userIdOne = i;
+    }
 
     @Basic
     @Column(name = "user_id_two")
-    public int getUserIdTwo(){return userIdTwo;}
+    public int getUserIdTwo() {
+        return userIdTwo;
+    }
 
-    public void setUserIdTwo(int i){this.userIdTwo = i;}
+    public void setUserIdTwo(int i) {
+        this.userIdTwo = i;
+    }
 
     @Basic
     @Column(name = "user_id_three")
-    public int getUserIdThree(){return userIdThree;}
+    public int getUserIdThree() {
+        return userIdThree;
+    }
 
-    public void setUserIdThree(int i){this.userIdThree = i;}
+    public void setUserIdThree(int i) {
+        this.userIdThree = i;
+    }
 
     @Basic
     @Column(name = "user_id_four")
-    public int getUserIdFour(){return userIdFour;}
+    public int getUserIdFour() {
+        return userIdFour;
+    }
 
-    public void setUserIdFour(int i){this.userIdFour = i;}
+    public void setUserIdFour(int i) {
+        this.userIdFour = i;
+    }
 
     @Basic
     @Column(name = "user_id_turn")
-    public int getUserIdTurn(){return userIdTurn;}
+    public int getUserIdTurn() {
+        return userIdTurn;
+    }
 
-    public void setUserIdTurn(int i){this.userIdTurn = i;}
+    public void setUserIdTurn(int i) {
+        this.userIdTurn = i;
+    }
 
     @Basic
     @Column(name = "user_one_score")
-    public int getUserOneScore(){return userOneScore;}
+    public int getUserOneScore() {
+        return userOneScore;
+    }
 
-    public void setUserOneScore(int i){this.userOneScore = i;}
+    public void setUserOneScore(int i) {
+        this.userOneScore = i;
+    }
 
     @Basic
     @Column(name = "user_two_score")
-    public int getUserTwoScore(){return userTwoScore;}
+    public int getUserTwoScore() {
+        return userTwoScore;
+    }
 
-    public void setUserTwoScore(int i){this.userTwoScore = i;}
+    public void setUserTwoScore(int i) {
+        this.userTwoScore = i;
+    }
 
     @Basic
     @Column(name = "user_three_score")
-    public int getUserThreeScore(){return userThreeScore;}
+    public int getUserThreeScore() {
+        return userThreeScore;
+    }
 
-    public void setUserThreeScore(int i){this.userThreeScore = i;}
+    public void setUserThreeScore(int i) {
+        this.userThreeScore = i;
+    }
 
     @Basic
     @Column(name = "user_four_score")
-    public int getUserFourScore(){return userFourScore;}
+    public int getUserFourScore() {
+        return userFourScore;
+    }
 
-    public void setUserFourScore(int i){this.userFourScore = i;}
+    public void setUserFourScore(int i) {
+        this.userFourScore = i;
+    }
 
     @OneToOne//(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_user_id")
-    public UserEntity getUserEntity(){
+    @JoinColumn(name = "user_user_id")
+    public UserEntity getUserEntity() {
         return userEntity;
     }
 
-    public void setUserEntity(UserEntity s){
+    public void setUserEntity(UserEntity s) {
         userEntity = s;
     }
 

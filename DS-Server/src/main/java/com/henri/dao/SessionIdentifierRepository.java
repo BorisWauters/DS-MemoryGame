@@ -8,12 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository("SessionIdentifierRepository")
-public interface SessionIdentifierRepository extends CrudRepository<SessionidentifierEntity,Integer> {
+public interface SessionIdentifierRepository extends CrudRepository<SessionidentifierEntity, Integer> {
 
     //Custom queries
     /*@Query("select u from UserEntity u")
     List<UserEntity> findAllUsers();*/
-
 
 
 }

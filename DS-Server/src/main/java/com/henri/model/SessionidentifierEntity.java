@@ -9,7 +9,8 @@ public class SessionidentifierEntity {
     private int sessionIdentifierId;
     private String sessionIdentifier;
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "session_identifier_id")
     public int getSessionIdentifierId() {
         return sessionIdentifierId;
