@@ -1,0 +1,115 @@
+
+/*
+# maps on ID tag
+. maps on styleClass tag
+*/
+.root {
+    -fx-font-size: 14px;
+    -fx-font-family: sans-serif;
+    -fx-background-color: #ffffff;
+}
+
+.header-section {
+    -fx-padding: 10px;
+    -fx-font-size: 20px;
+    -fx-background-color: teal;
+}
+
+.header-section Label {
+    -fx-text-fill: #ffffff;
+    -fx-padding: 10px;
+}
+
+.header-section Button{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+}
+
+
+.list-cell:filled:hover{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+}
+
+#account {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+.sidebar-section {
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+    -fx-border-width: 1;
+    -fx-border-color: transparent #E8E8E8 transparent transparent;
+}
+
+.sidebar-section Label {
+    -fx-font-size: 18px;
+    -fx-padding: 10 15 10 15;
+    -fx-border-width: 1;
+    -fx-border-color: transparent transparent #E8E8E8 transparent;
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+}
+
+.content-section {
+    -fx-wrap-text: true;
+
+}
+
+.content-section TextField{
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+}
+.content-section Button{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+}
+
+.content-section PasswordField{
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
+}
+.content-section Label{
+    -fx-border-radius: 5 5 5 5;
+    -fx-background-radius: 5 5 5 5;
+    -fx-border-color: teal;
+}
+.content-section CheckBox .box{
+    -fx-border-radius: 5 5 5 5;
+    -fx-background-radius: 5 5 5 5;
+    -fx-border-color: teal;
+    -fx-background-color: white;
+}
+
+.content-section Checkbox:selected .mark{
+    -fx-background-color: teal;
+}
+
+
+#content-header {
+    -fx-font-size: 18px;
+    -fx-padding: 0 0 10 0;
+    -fx-font-weight: 700;
+}
+
+#content {
+    -fx-wrap-text: true;
+    -fx-font-size: 16px;
+}
+
+#footer-section {
+    -fx-alignment: center;
+    -fx-padding: 10 10 10 10;
+    -fx-border-width: 1;
+    -fx-border-color: #E8E8E8 transparent transparent transparent;
+}
+
+.backButton{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+}

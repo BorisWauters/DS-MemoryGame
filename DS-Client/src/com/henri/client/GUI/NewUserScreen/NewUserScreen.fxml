@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.NewUserScreen.NewUserScreenController">
+    <children>
+        <ToolBar prefHeight="27.0" prefWidth="600.0" styleClass="header-section" stylesheets="@../Layout.css">
+            <items>
+                <Label text="Memory Game - New User" />
+            </items>
+        </ToolBar>
+        <Pane layoutY="70.0" prefHeight="330.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css">
+         <children>
+            <Label fx:id="credentialsLabel" layoutX="226.0" layoutY="32.0" textFill="#d71111" visible="false" />
+            <TextField fx:id="username" layoutX="226.0" layoutY="71.0" promptText="Username" />
+            <PasswordField fx:id="password" layoutX="226.0" layoutY="120.0" promptText="Password" />
+            <PasswordField fx:id="passwordCheck" layoutX="226.0" layoutY="167.0" promptText="Password Check" />
+            <Button layoutX="270.0" layoutY="222.0" mnemonicParsing="false" onAction="#register" text="Register" />
+             <Button fx:id="backButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+         </children>
+        </Pane>
+    </children>
+</AnchorPane>

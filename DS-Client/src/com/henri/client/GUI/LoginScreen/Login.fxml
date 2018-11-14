@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.LoginScreen.LoginController">
+    <children>
+        <ToolBar prefHeight="27.0" prefWidth="600.0" styleClass="header-section" stylesheets="@../Layout.css">
+            <items>
+                <Label text="Memory Game - Login" />
+            </items>
+        </ToolBar>
+        <Pane layoutY="63.0" prefHeight="337.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css">
+            <children>
+                <TextField fx:id="username" layoutX="212.0" layoutY="103.0" promptText="Username" styleClass="content-section" stylesheets="@../Layout.css">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </TextField>
+                <PasswordField fx:id="password" layoutX="212.0" layoutY="156.0" promptText="Password" styleClass="content-section" stylesheets="@../Layout.css" />
+                <Button fx:id="loginButton" layoutX="273.0" layoutY="224.0" mnemonicParsing="false" onAction="#login" styleClass="content-section" stylesheets="@../Layout.css" text="Login" />
+            <Label fx:id="credentialsLabel" layoutX="212.0" layoutY="28.0" textFill="#d71010" visible="false" />
+            <Button fx:id="backButton" layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
+            </children>
+        </Pane>
+    </children>
+
+
+</AnchorPane>

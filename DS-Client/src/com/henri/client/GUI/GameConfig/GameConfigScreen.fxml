@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameConfig.GameConfigController">
+    <children>
+        <ToolBar prefHeight="63.0" prefWidth="800.0" styleClass="header-section" stylesheets="@../Layout.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <items>
+                <Label text="Memory Game" />
+            </items>
+        </ToolBar>
+        <AnchorPane layoutY="63.0" prefHeight="538.0" prefWidth="800.0" styleClass="content-section" stylesheets="@../Layout.css" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="63.0">
+         <children>
+            <Group layoutX="47.0" layoutY="52.0" AnchorPane.bottomAnchor="324.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="543.2705078125" AnchorPane.topAnchor="52.0">
+               <children>
+                  <Label styleClass="content-section" text=" Choose Number of Participating Players " />
+                  <CheckBox fx:id="twoPlayers" layoutY="50.0" mnemonicParsing="false" text="2 players" />
+                  <CheckBox fx:id="threePlayers" layoutY="94.0" mnemonicParsing="false" text="3 players" />
+                  <CheckBox fx:id="fourPlayers" layoutY="140.0" mnemonicParsing="false" text="4 players" />
+                  <Label fx:id="playerLabel" layoutX="165.0" layoutY="94.0" visible="false" />
+               </children>
+            </Group>
+            <Group layoutX="47.0" layoutY="247.0" AnchorPane.bottomAnchor="129.0" AnchorPane.leftAnchor="47.0" AnchorPane.rightAnchor="609.80078125" AnchorPane.topAnchor="247.0">
+               <children>
+                  <Label styleClass="content-section" text=" Choose Playing Field Size " />
+                  <CheckBox fx:id="fourByFour" layoutY="50.0" mnemonicParsing="false" text="4 X 4" />
+                  <CheckBox fx:id="sixBySix" layoutY="94.0" mnemonicParsing="false" text="6 X 6" />
+                  <CheckBox fx:id="fourBySix" layoutY="140.0" mnemonicParsing="false" text="4 X 6" />
+                  <Label fx:id="sizeLabel" layoutX="167.0" layoutY="95.0" visible="false" />
+               </children>
+            </Group>
+            <Group layoutX="542.0" layoutY="52.0" AnchorPane.bottomAnchor="370.0" AnchorPane.leftAnchor="542.0" AnchorPane.rightAnchor="148.26953125" AnchorPane.topAnchor="52.0">
+               <children>
+                  <Label styleClass="content-section" text=" Choose Card Theme " />
+                  <CheckBox fx:id="softwareTheme" layoutY="50.0" mnemonicParsing="false" text="Software" />
+                  <CheckBox fx:id="secondTheme" layoutY="94.0" mnemonicParsing="false" text="--" />
+               </children>
+            </Group>
+            <Button fx:id="createGame" layoutX="573.0" layoutY="383.0" mnemonicParsing="false" onAction="#newGame" text="Create Game" AnchorPane.bottomAnchor="129.0" AnchorPane.leftAnchor="573.0" AnchorPane.rightAnchor="152.0" AnchorPane.topAnchor="383.0" />
+            <Label fx:id="themeLabel" layoutX="719.0" layoutY="123.0" visible="false" />
+            <TextField fx:id="gameName" layoutX="542.0" layoutY="285.0" promptText="Game Name" />
+         </children></AnchorPane>
+    </children>
+
+
+</AnchorPane>

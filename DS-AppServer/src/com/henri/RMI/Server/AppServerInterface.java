@@ -1,0 +1,38 @@
+package com.henri.RMI.Server;
+
+import java.lang.reflect.Array;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+
+public interface AppServerInterface extends Remote {
+
+    void registerForCallback(
+            CallbackClientInterface callbackClientObject, String username
+    ) throws RemoteException;
+
+    String setupMessage(String username, String password)throws RemoteException;
+
+    boolean checkUsername(String username)throws RemoteException;
+
+    void registerUser(String username, String password)throws RemoteException;
+
+    String acquireSessionId(String username) throws RemoteException;
+
+    void createGame(String gameConfig, String username) throws RemoteException;
+
+    ArrayList<String> requestGames(String username) throws RemoteException;
+
+    ArrayList<String> requestAllGames(String username) throws RemoteException;
+
+
+    void requestJoin(int gameId, String username) throws RemoteException;
+
+    boolean checkTurn(int gameId, String username) throws  RemoteException;
+
+    ArrayList<String> requestGameConfig(int gameId) throws RemoteException;
+
+    void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score) throws RemoteException;
+
+    String requestGameWinner(int gameId) throws RemoteException;
+}
