@@ -32,7 +32,7 @@ public interface InterfaceServer extends Remote {
 
     ArrayList<String> requestGameConfig(int gameId) throws RemoteException;
 
-    void updateGame(int gameId, String username, String gamePositions, int score) throws RemoteException;
+    boolean updateGame(int gameId, String username, String gamePositions, int score) throws RemoteException;
 
     String requestGameWinner(int gameId) throws RemoteException;
 }

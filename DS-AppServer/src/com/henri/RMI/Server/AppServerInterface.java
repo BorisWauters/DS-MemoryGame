@@ -1,15 +1,18 @@
 package com.henri.RMI.Server;
 
-import java.lang.reflect.Array;
+import com.henri.client.RMI.CallbackClientInterface;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public interface AppServerInterface extends Remote {
 
-    void registerForCallback(
-            CallbackClientInterface callbackClientObject, String username
+    void registerForCallback( int controllerId,
+            CallbackClientInterface callbackClientObject, int gameId
     ) throws RemoteException;
+
+    void removeCallback(int controllerId) throws RemoteException;
 
     String setupMessage(String username, String password)throws RemoteException;
 
@@ -35,4 +38,6 @@ public interface AppServerInterface extends Remote {
     void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score) throws RemoteException;
 
     String requestGameWinner(int gameId) throws RemoteException;
+
+    void updateCardFlip(int buttonId, int gameId, int controllerId) throws  RemoteException;
 }

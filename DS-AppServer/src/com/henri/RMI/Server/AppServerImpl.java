@@ -1,5 +1,7 @@
 package com.henri.RMI.Server;
 
+import com.henri.client.RMI.CallbackClientInterface;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -9,22 +11,30 @@ import static com.henri.RMI.Client.ClientMain.impl;
 public class AppServerImpl extends UnicastRemoteObject implements AppServerInterface {
 
     private Set<String> userSet = new HashSet<>();
-    private Map<String, CallbackClientInterface> clientList;
+    private Map<Integer, ArrayList<Object> > clientList;
 
     public AppServerImpl() throws RemoteException {
         clientList = new HashMap<>();
     }
 
     @Override
-    public synchronized void registerForCallback(
-            CallbackClientInterface callbackClientObject, String username)
+    public synchronized void registerForCallback( int controllerId,
+            CallbackClientInterface callbackClientObject, int gameId)
             throws RemoteException {
-        // store the callback object into the Map (only possible after the setup has been executed
-        if ((userSet.contains(username))) {
-            clientList.put(username, callbackClientObject);
-            System.out.println("Registered new client ");
-            //doCallbacks();
-        } // end if
+        // store the callback object into the Map
+        ArrayList<Object> values = new ArrayList<>();
+        values.add(gameId);
+        values.add(callbackClientObject);
+        clientList.put(controllerId,values);
+    }
+
+    @Override
+    public void removeCallback(int controllerId) throws  RemoteException{
+        int keyToRemove = -1;
+        for(Map.Entry<Integer,ArrayList<Object>> entry : clientList.entrySet()){
+            if(entry.getKey() == controllerId) keyToRemove = entry.getKey();
+        }
+        clientList.remove(keyToRemove);
     }
 
     @Override
@@ -120,7 +130,18 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
                 sb.append(",");
             }
         }
-        impl.updateGame(gameId, username, sb.toString(), score);
+        boolean updated = impl.updateGame(gameId, username, sb.toString(), score);
+        if(updated){
+            for(Map.Entry<Integer,ArrayList<Object>> entry : clientList.entrySet()){
+                int gameIdFromList = (int)entry.getValue().get(0);
+                if(gameIdFromList == gameId){
+                    CallbackClientInterface callbackClientObject = (CallbackClientInterface)entry.getValue().get(1);
+                    callbackClientObject.refreshScreen();
+                }
+            }
+        }
+
+
 
     }
 
@@ -152,5 +173,16 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
     @Override
     public String requestGameWinner(int gameId) throws RemoteException{
        return impl.requestGameWinner(gameId);
+    }
+
+    @Override
+    public void updateCardFlip(int buttonId, int gameId, int controllerId) throws RemoteException{
+        for(Map.Entry<Integer,ArrayList<Object>> entry : clientList.entrySet()){
+            int gameIdFromList = (int)entry.getValue().get(0);
+            if(gameIdFromList == gameId && controllerId != entry.getKey()){
+                CallbackClientInterface callbackClientObject = (CallbackClientInterface)entry.getValue().get(1);
+                callbackClientObject.updateCardFlip(buttonId);
+            }
+        }
     }
 }

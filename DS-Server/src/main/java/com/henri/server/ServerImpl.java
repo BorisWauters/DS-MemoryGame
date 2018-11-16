@@ -201,12 +201,13 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
     }
 
     @Override
-    public void updateGame(int gameId, String username, String gamePositions, int score) throws RemoteException {
+    public boolean updateGame(int gameId, String username, String gamePositions, int score) throws RemoteException {
         GameEntity gameEntity = gameRepository.findGameEntityByGameId(gameId);
         UserEntity userEntity = userEntityRepository.findUserEntityByUsername(username);
         gameEntity.setGamePositions(gamePositions);
         GameEntity g = setScoreAndNextPlayer(gameEntity, userEntity.getUserId(), score);
         gameRepository.save(g);
+        return true;
     }
 
     @Override

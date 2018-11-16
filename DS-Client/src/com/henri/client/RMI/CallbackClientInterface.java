@@ -1,7 +1,13 @@
 package com.henri.client.RMI;
 
-public interface CallbackClientInterface {
+import java.rmi.RemoteException;
+
+public interface CallbackClientInterface extends java.rmi.Remote{
 
     String notifyMe(String message)
-            throws java.rmi.RemoteException;
+            throws RemoteException;
+
+    void updateCardFlip(int buttonId) throws RemoteException;
+
+    void refreshScreen() throws RemoteException;
 }
