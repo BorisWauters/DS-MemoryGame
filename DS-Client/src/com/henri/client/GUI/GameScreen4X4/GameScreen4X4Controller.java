@@ -1,5 +1,6 @@
 package com.henri.client.GUI.GameScreen4X4;
 
+import com.henri.client.GUI.GameScreen.GameScreen;
 import com.henri.client.GUI.MainClient;
 import com.henri.client.RMI.CallbackClientImpl;
 import com.henri.client.RMI.CallbackClientInterface;
@@ -18,8 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import javax.swing.Timer;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -27,23 +26,32 @@ import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class GameScreen4X4Controller implements Initializable {
+import static com.henri.client.GUI.GameScreen.GameScreen.*;
+
+public class GameScreen4X4Controller implements Initializable{
+
+
 
     private int controllerId;
-
     private boolean viewOnly = false;
+
     private int gameId, numberOfUsers, gameTheme, maxUserAllowed;
-    private boolean join = false;
-    private ArrayList<String> gamePositions;
-    private boolean myTurn = false;
     private String gameName;
+
+    private boolean join = false;
+    private boolean myTurn = false;
+
+    private ArrayList<String> gamePositions;
     private ArrayList<Button> buttons;
     private ArrayList<String> images;
     private Map<Integer, String> buttonToFileMapping = new HashMap<>();
-    private Button pressedButton = null;
     private Set<Integer> correctGuesses = new HashSet<>();
+
     private int cardsTurnedGuessedRightInTotal;
+
     private File closedFile;
+
+    private Button pressedButton = null;
 
     private CallbackClientInterface callBackObj;
 
@@ -125,15 +133,7 @@ public class GameScreen4X4Controller implements Initializable {
 
             //Set new on close handler to remove callback from app server
             Stage stage = (Stage) ap.getScene().getWindow();
-            stage.setOnCloseRequest(event -> {
-                try {
-                    MainClient.impl.removeCallback(controllerId);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-                Platform.exit();
-                System.exit(0);
-            });
+            removeCallback(stage, controllerId);
 
         });
 
@@ -178,20 +178,7 @@ public class GameScreen4X4Controller implements Initializable {
     }
 
     public void updateButton(int buttonId) {
-        for (Button b : buttons) {
-            if (Integer.parseInt(b.getId()) == buttonId) {
-                Platform.runLater(() -> {
-                    File f2 = new File(buttonToFileMapping.get(buttonId));
-                    Image image = new Image(f2.toURI().toString());
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitWidth(100);
-                    imageView.setFitHeight(90);
-                    b.setStyle("-fx-background-color: #FFFFFF");
-                    b.setGraphic(imageView);
-
-                });
-            }
-        }
+        GameScreen.updateButton(buttonId, buttons, buttonToFileMapping);
     }
 
     public void buttonClicked(ActionEvent actionEvent) throws RemoteException, InterruptedException {
@@ -214,7 +201,7 @@ public class GameScreen4X4Controller implements Initializable {
 
             if (Integer.parseInt(b.getId()) == Integer.parseInt(gamePositions.get(i)) - 1) {
                 i++;
-                MainClient.impl.updateCardFlip(Integer.parseInt(b.getId()), gameId, controllerId);
+                MainClient.impl.updateCardFlip(Integer.parseInt(b.getId()), gameId, controllerId, 1);
             } else {
                 i++;
             }
@@ -251,7 +238,7 @@ public class GameScreen4X4Controller implements Initializable {
 
                 if (cardsTurnedGuessedRightInTotal == 16) {
                     updateGamePositions();
-                    MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2);
+                    MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, 1);
                     //MainClient.impl.requestGameWinner(gameId);
                     notYourTurnLabel.setText("Game Over!");
                 }
@@ -266,7 +253,7 @@ public class GameScreen4X4Controller implements Initializable {
 
                 updateGamePositions();
 
-                MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2);
+                MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, 1);
 
             }
 
@@ -466,5 +453,12 @@ public class GameScreen4X4Controller implements Initializable {
         this.join = join;
     }
 
+    public int getControllerId() {
+        return controllerId;
+    }
+
+    public void setControllerId(int controllerId) {
+        this.controllerId = controllerId;
+    }
 
 }

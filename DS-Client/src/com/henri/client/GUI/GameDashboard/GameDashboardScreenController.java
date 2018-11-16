@@ -41,7 +41,7 @@ public class GameDashboardScreenController implements Initializable{
     public void setScene(Scene mScene){this.mScene = mScene;}
 
     @FXML
-    private Button newGame;
+    private Button newGame,refresh;
 
     @FXML
     private ListView playerGames;
@@ -52,33 +52,7 @@ public class GameDashboardScreenController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //get current games for the user
-        try {
-            ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
-                        //items = createObservable(playerGamesList, gameSizesJoinedGames, numberOfPLayers, gameIdentifiers);
-
-            ObservableList<String> items = FXCollections.observableArrayList();
-            createObservable(playerGamesList, items, gameIdentifiers, numberOfPLayers, gameSizesJoinedGames);
-
-            playerGames.setItems(items);
-            System.out.println(items.toString());
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        //Get all other games which the user hasn't joined
-        try{
-            ArrayList<String> playerGamesList = MainClient.impl.requestAllGames(MainClient.username);
-
-            ObservableList<String> items = FXCollections.observableArrayList();
-            createObservable(playerGamesList, items, gameIdentifiersAllGames, numberOfPlayersAllGames, gameSizesAllGames);
-
-
-            allGames.setItems(items);
-
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
+        requestGames();
     }
 
     public void createObservable(ArrayList<String> playerGamesList, ObservableList<String> items, ArrayList<Integer> gameIdentifiers, ArrayList<Integer> numberOfPLayers, ArrayList<Integer> gameSizesJoinedGames) {
@@ -234,5 +208,38 @@ public class GameDashboardScreenController implements Initializable{
         primaryStage.setScene(homeScreenScene);
     }
 
+    public void requestGames(){
+        try {
+            ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
+            //items = createObservable(playerGamesList, gameSizesJoinedGames, numberOfPLayers, gameIdentifiers);
+
+            ObservableList<String> items = FXCollections.observableArrayList();
+            createObservable(playerGamesList, items, gameIdentifiers, numberOfPLayers, gameSizesJoinedGames);
+
+            playerGames.setItems(items);
+            System.out.println(items.toString());
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        //Get all other games which the user hasn't joined
+        try{
+            ArrayList<String> playerGamesList = MainClient.impl.requestAllGames(MainClient.username);
+
+            ObservableList<String> items = FXCollections.observableArrayList();
+            createObservable(playerGamesList, items, gameIdentifiersAllGames, numberOfPlayersAllGames, gameSizesAllGames);
+
+
+            allGames.setItems(items);
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshScreen(ActionEvent actionEvent){
+        requestGames();
+    }
 
 }

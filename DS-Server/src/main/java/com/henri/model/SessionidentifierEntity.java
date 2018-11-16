@@ -1,6 +1,7 @@
 package com.henri.model;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -8,6 +9,7 @@ import java.util.Objects;
 public class SessionidentifierEntity {
     private int sessionIdentifierId;
     private String sessionIdentifier;
+    private Date cancellationTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +30,14 @@ public class SessionidentifierEntity {
 
     public void setSessionIdentifier(String sessionIdentifier) {
         this.sessionIdentifier = sessionIdentifier;
+    }
+
+    @Basic
+    @Column(name = "cancellation_time")
+    public Date getCancellationTime(){return cancellationTime;}
+
+    public void setCancellationTime(Date cancellationTime) {
+        this.cancellationTime = cancellationTime;
     }
 
     @Override

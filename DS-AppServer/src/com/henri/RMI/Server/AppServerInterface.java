@@ -35,9 +35,9 @@ public interface AppServerInterface extends Remote {
 
     ArrayList<String> requestGameConfig(int gameId) throws RemoteException;
 
-    void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score) throws RemoteException;
+    void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score, int controllerType) throws RemoteException;
 
     String requestGameWinner(int gameId) throws RemoteException;
 
-    void updateCardFlip(int buttonId, int gameId, int controllerId) throws  RemoteException;
+    void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws  RemoteException;
 }

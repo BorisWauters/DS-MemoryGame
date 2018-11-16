@@ -53,7 +53,7 @@ public class GameConfigController {
     private CheckBox secondTheme;
 
     @FXML
-    private Label themeLabel;
+    private Label themeLabel, gameLabel;
 
     @FXML
     private Button createGame;
@@ -67,18 +67,22 @@ public class GameConfigController {
         boolean inputCorrect = true;
 
         if((twoPlayers.isSelected() && threePlayers.isSelected()) || (threePlayers.isSelected() && fourPlayers.isSelected()) || (twoPlayers.isSelected() && fourPlayers.isSelected())){
-            playerLabel.setText("Only select one box!");
+            playerLabel.setText(" Only select one box! ");
             playerLabel.setVisible(true);
             inputCorrect = false;
         }if((fourByFour.isSelected() && sixBySix.isSelected()) || (sixBySix.isSelected() && fourBySix.isSelected()) || (fourByFour.isSelected() && fourBySix.isSelected())){
-            sizeLabel.setText("Only select one box!");
+            sizeLabel.setText(" Only select one box! ");
             sizeLabel.setVisible(true);
             inputCorrect = false;
         }if((softwareTheme.isSelected() && secondTheme.isSelected())){
-            themeLabel.setText("Only select one box!");
+            themeLabel.setText(" Only select one box! ");
             themeLabel.setVisible(true);
             inputCorrect = false;
-        }if(inputCorrect){
+        }if(gameName.getText().isEmpty()){
+            gameLabel.setText(" Enter a game name! ");
+            inputCorrect = false;
+        }
+        if(inputCorrect){
             //initiate game on app server
             if(twoPlayers.isSelected()) numberOfPlayers = 2;
             else if(threePlayers.isSelected()) numberOfPlayers = 3;
