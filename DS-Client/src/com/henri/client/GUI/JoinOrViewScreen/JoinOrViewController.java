@@ -81,13 +81,13 @@ public class JoinOrViewController {
             Parent gameScreenPane =  gameScreenLoader.load();
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
-            gameScreen4X6Controller.setGameId(gameId);
+            /*gameScreen4X6Controller.setGameId(gameId);
             if(!viewOnly){
                 gameScreen4X6Controller.setJoin(true);
             }
             if(viewOnly){
                 gameScreen4X6Controller.setViewOnly(true);
-            }
+            }*/
 
             Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);

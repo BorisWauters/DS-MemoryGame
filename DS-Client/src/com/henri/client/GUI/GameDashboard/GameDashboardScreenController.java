@@ -189,10 +189,10 @@ public class GameDashboardScreenController implements Initializable{
             Parent gameScreenPane =  gameScreenLoader.load();
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
-            gameScreen4X6Controller.setGameId(gameId);
+            /*gameScreen4X6Controller.setGameId(gameId);
             if(viewOnly){
                 gameScreen4X6Controller.setViewOnly(true);
-            }
+            }*/
 
             Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);
