@@ -101,7 +101,7 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         SessionidentifierEntity s = new SessionidentifierEntity();
         //set identifier to object
         s.setSessionIdentifier(sessionId);
-        s.setCancellationTime(System.currentTimeMillis());
+        s.setCancellationTime((System.currentTimeMillis()));
         sessionIdentifierRepository.save(s);
         //set object to user
         userEntity.setSessionIdentifierEntity(s);
@@ -109,9 +109,9 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         userEntityRepository.save(userEntity);
 
         StringBuilder sb = new StringBuilder();
-        sb.append(sessionId);
+        sb.append(s.getSessionIdentifierId());
         sb.append(",");
-        sb.append(s.getCancellationTime());
+        sb.append(sessionId);
 
         //return the sessionId
         return sb.toString();
@@ -219,23 +219,50 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
     }
 
     @Override
-    public String requestGameWinner(int gameId) throws RemoteException {
+    public ArrayList<String> requestGameWinner(int gameId) throws RemoteException {
         GameEntity gameEntity = gameRepository.findGameEntityByGameId(gameId);
         int scoreUserOne = (gameEntity.getUserOneScore());
         int scoreUserTwo = (gameEntity.getUserTwoScore());
         int scoreUserThree = (gameEntity.getUserThreeScore());
         int scoreUserFour = (gameEntity.getUserFourScore());
+        ArrayList<Integer> scores = new ArrayList<>();
+        scores.add(scoreUserOne);
+        scores.add(scoreUserTwo);
+        scores.add(scoreUserThree);
+        scores.add(scoreUserFour);
 
-        if (scoreUserOne > scoreUserTwo && scoreUserOne > scoreUserThree && scoreUserOne > scoreUserFour) {
-            return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdOne()).getUsername();
-        } else if (scoreUserTwo > scoreUserOne && scoreUserTwo > scoreUserThree && scoreUserTwo > scoreUserFour) {
-            return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdTwo()).getUsername();
-        } else if (scoreUserThree > scoreUserOne && scoreUserThree > scoreUserTwo && scoreUserThree > scoreUserFour) {
-            return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdThree()).getUsername();
-        } else if (scoreUserFour > scoreUserOne && scoreUserFour > scoreUserThree && scoreUserFour > scoreUserThree) {
-            return userEntityRepository.findUserEntityByUserId(gameEntity.getUserIdFour()).getUsername();
+        ArrayList<Integer> players = new ArrayList<>();
+        players.add(gameEntity.getUserIdOne());
+        players.add(gameEntity.getUserIdTwo());
+        players.add(gameEntity.getUserIdThree());
+        players.add(gameEntity.getUserIdFour());
+
+        ArrayList<UserEntity> winners = findMaxScore(scores, players);
+
+        ArrayList<String> winnerNames = new ArrayList<>();
+        for(int i = 0; i < winners.size(); i++){
+            winnerNames.add(winners.get(i).getUsername());
         }
-        return null;
+        return winnerNames;
+    }
+
+    public ArrayList<UserEntity> findMaxScore(ArrayList<Integer> scores, ArrayList<Integer> players){
+        ArrayList<UserEntity> winners = new ArrayList<>();
+
+        int max = 0;
+        for(int i = 0; i < scores.size(); i++){
+            if(scores.get(i) > max){
+                winners.clear();
+                max = scores.get(i);
+                winners.add(userEntityRepository.findUserEntityByUserId(players.get(i)));
+            }else if(scores.get(i) == max){
+                winners.add(userEntityRepository.findUserEntityByUserId(players.get(i)));
+            }
+        }
+        for(UserEntity userEntity : winners){
+            userEntity.setScore(max);
+        }
+        return winners;
     }
 
     @Override

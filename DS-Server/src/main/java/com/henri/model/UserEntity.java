@@ -6,7 +6,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "user", schema = "ds")
 public class UserEntity {
-    private int userId;
+    private int userId, score;
     private String username;
     private String password;
     private SessionidentifierEntity sessionidentifierEntity;
@@ -40,6 +40,12 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    @Basic
+    @Column(name = "score")
+    public int getScore(){ return  score;}
+
+    public void setScore(int score){ this.score = score;}
 
     @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_identifier_session_identifier_Id")

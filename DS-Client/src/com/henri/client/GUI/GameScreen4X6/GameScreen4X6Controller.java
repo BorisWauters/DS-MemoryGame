@@ -81,10 +81,8 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
 
             if (getCardsTurnedGuessedRightInTotal() == 24) {
-                notYourTurnLabel.setText("Game Over!");
-                for(Button b : getButtons()){
-                    b.setDisable(true);
-                }
+                setWinner(notYourTurnLabel);
+
             }
 
 
@@ -137,7 +135,7 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
     public void refreshScreen(){
         Platform.runLater(() -> {
-            refreshScreenGeneral(notYourTurnLabel);
+            refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
         });
 
     }

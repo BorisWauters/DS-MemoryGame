@@ -133,7 +133,7 @@ public class GameScreen extends SendBack {
                 pressedButton.setDisable(true);
                 pressedButton = null;
 
-                if (cardsTurnedGuessedRightInTotal == 16) {
+                if (cardsTurnedGuessedRightInTotal == gamePositions.size()/2) {
                     updateGamePositions();
                     MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
                     //MainClient.impl.requestGameWinner(gameId);
@@ -185,7 +185,7 @@ public class GameScreen extends SendBack {
                 b.setStyle("-fx-background-color: #FFFFFF");
                 b.setGraphic(imageView);
 
-                setCardsTurnedGuessedRightInTotal(getCardsTurnedGuessedRightInTotal() + 1);
+                cardsTurnedGuessedRightInTotal++;
                 //b.setDisable(true);
             }
         }
@@ -203,9 +203,10 @@ public class GameScreen extends SendBack {
         }
     }
 
-    public void refreshScreenGeneral(Label notYourTurnLabel) {
+    public void refreshScreenGeneral(Label notYourTurnLabel, int gameSize) {
         pressedButton = null;
         cardsTurnedGuessedRightInTotal = 0;
+        correctGuesses.clear();
         System.out.println("refreshing screen..");
         for (Button b : buttons) {
             b.setStyle(null);
@@ -216,8 +217,8 @@ public class GameScreen extends SendBack {
 
         checkTurnGeneral(notYourTurnLabel);
 
-        if (cardsTurnedGuessedRightInTotal == 16) {
-            notYourTurnLabel.setText("Game Over!");
+        if (cardsTurnedGuessedRightInTotal == gameSize/2) {
+            setWinner(notYourTurnLabel);
         }
         System.out.println("screen refreshed");
     }
@@ -268,7 +269,7 @@ public class GameScreen extends SendBack {
                 notYourTurnLabel.setText("It's not your turn!");
                 notYourTurnLabel.setVisible(true);
             } else {
-                notYourTurnLabel.setVisible(false);
+                //notYourTurnLabel.setVisible(false);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -302,6 +303,30 @@ public class GameScreen extends SendBack {
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(gameDashboardScreenScene);
 
+    }
+
+    public void setWinner(Label notYourTurnLabel){
+        ArrayList<String> winners = null;
+        try {
+            winners = MainClient.impl.requestGameWinner(getGameId());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        for(Button b : getButtons()){
+            b.setDisable(true);
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < winners.size(); i++){
+            sb.append(winners.get(i));
+            if(i < winners.size() - 1){
+                sb.append(", ");
+            }
+        }
+        if(winners.size() == 1){
+            notYourTurnLabel.setText("Game Over! Winner is " + sb.toString());
+        }else{
+            notYourTurnLabel.setText("Game over! Winners are " + sb.toString());
+        }
     }
     //GETTERS AND SETTERS
 

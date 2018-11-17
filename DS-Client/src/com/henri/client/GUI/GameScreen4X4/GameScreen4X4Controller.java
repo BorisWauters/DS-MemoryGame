@@ -2,21 +2,13 @@ package com.henri.client.GUI.GameScreen4X4;
 
 import com.henri.client.GUI.GameScreen.GameScreen;
 import com.henri.client.GUI.MainClient;
-import com.henri.client.GUI.SendBack;
 import com.henri.client.RMI.CallbackClientImpl;
-import com.henri.client.RMI.CallbackClientInterface;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -85,10 +77,8 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
 
             if (getCardsTurnedGuessedRightInTotal() == 16) {
-                notYourTurnLabel.setText("Game Over!");
-                for(Button b : getButtons()){
-                    b.setDisable(true);
-                }
+                setWinner(notYourTurnLabel);
+
             }
 
 
@@ -142,7 +132,7 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
     public void refreshScreen(){
         Platform.runLater(() -> {
-            refreshScreenGeneral(notYourTurnLabel);
+            refreshScreenGeneral(notYourTurnLabel,getGamePositions().size());
         });
 
     }

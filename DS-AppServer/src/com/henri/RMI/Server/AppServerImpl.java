@@ -171,7 +171,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
     }
 
     @Override
-    public String requestGameWinner(int gameId) throws RemoteException{
+    public ArrayList<String> requestGameWinner(int gameId) throws RemoteException{
        return impl.requestGameWinner(gameId);
     }
 

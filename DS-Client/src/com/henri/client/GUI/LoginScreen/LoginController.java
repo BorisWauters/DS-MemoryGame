@@ -64,8 +64,8 @@ public class LoginController {
             MainClient.username = username.getText();
             String sessionConfig = MainClient.impl.acquireSessionId(name);
             ArrayList<String> sessionConfigList = new ArrayList<>(Arrays.asList(sessionConfig.split("\\s*,\\s*")));
-            MainClient.sessionIdentifier = sessionConfigList.get(0);
-            MainClient.sessionIdentifier_Id = Integer.parseInt(sessionConfigList.get(1));
+            MainClient.sessionIdentifier_Id = Integer.parseInt(sessionConfigList.get(0));
+            MainClient.sessionIdentifier = sessionConfigList.get(1);
             System.out.println("session id: " + MainClient.sessionIdentifier);
 
             FXMLLoader gameDashboardLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));

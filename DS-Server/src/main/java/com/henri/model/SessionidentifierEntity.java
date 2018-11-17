@@ -9,7 +9,7 @@ import java.util.Objects;
 public class SessionidentifierEntity {
     private int sessionIdentifierId;
     private String sessionIdentifier;
-    private long cancellationTime;
+    private Long cancellationTime = Long.valueOf(0);
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
