@@ -26,7 +26,7 @@ public class GameScreen {
 
     //Algemene klasse waar de controllers kunnen van overerven
 
-    private int controllerId;
+    private int controllerId, controllerType;
     private boolean viewOnly = false;
 
     private int gameId, numberOfUsers, gameTheme, maxUserAllowed;
@@ -50,7 +50,7 @@ public class GameScreen {
     private CallbackClientInterface callbackObj;
 
     public void removeCallbackGeneral(Stage stage, int controllerId) {
-        stage.setOnCloseRequest(event -> {
+
             try {
                 MainClient.impl.removeCallback(controllerId);
             } catch (RemoteException e) {
@@ -58,7 +58,7 @@ public class GameScreen {
             }
             Platform.exit();
             System.exit(0);
-        });
+
     }
 
     public void updateButtonGeneral(int buttonId) {
@@ -97,7 +97,7 @@ public class GameScreen {
 
             if (Integer.parseInt(b.getId()) == Integer.parseInt(gamePositions.get(i)) - 1) {
                 i++;
-                MainClient.impl.updateCardFlip(Integer.parseInt(b.getId()), gameId, controllerId, 1);
+                MainClient.impl.updateCardFlip(Integer.parseInt(b.getId()), gameId, controllerId, controllerType);
             } else {
                 i++;
             }
@@ -134,7 +134,7 @@ public class GameScreen {
 
                 if (cardsTurnedGuessedRightInTotal == 16) {
                     updateGamePositions();
-                    MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, 1);
+                    MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
                     //MainClient.impl.requestGameWinner(gameId);
                     notYourTurnLabel.setText("Game Over!");
                 }
@@ -149,7 +149,7 @@ public class GameScreen {
 
                 updateGamePositions();
 
-                MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, 1);
+                MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
 
             }
 
@@ -447,5 +447,13 @@ public class GameScreen {
 
     public void setCallbackObj(CallbackClientImpl callbackObj) {
         this.callbackObj = callbackObj;
+    }
+
+    public int getControllerType() {
+        return controllerType;
+    }
+
+    public void setControllerType(int controllerType) {
+        this.controllerType = controllerType;
     }
 }

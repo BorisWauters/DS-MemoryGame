@@ -49,6 +49,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X4Controller gameScreen4X4Controller = gameScreenLoader.getController();
             gameScreen4X4Controller.setGameId(gameId);
+            gameScreen4X4Controller.setControllerType(1);
             if(!viewOnly){
                 gameScreen4X4Controller.setJoin(true);
             }
@@ -66,6 +67,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen6X6Controller gameScreen6X6Controller = gameScreenLoader.getController();
             gameScreen6X6Controller.setGameId(gameId);
+            //gameScreen6X6Controller.setControllerType(2);
             if(!viewOnly){
                 gameScreen6X6Controller.setJoin(true);
             }
@@ -81,13 +83,14 @@ public class JoinOrViewController {
             Parent gameScreenPane =  gameScreenLoader.load();
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
-            /*gameScreen4X6Controller.setGameId(gameId);
+            gameScreen4X6Controller.setGameId(gameId);
+            gameScreen4X6Controller.setControllerType(3);
             if(!viewOnly){
                 gameScreen4X6Controller.setJoin(true);
             }
             if(viewOnly){
                 gameScreen4X6Controller.setViewOnly(true);
-            }*/
+            }
 
             Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);

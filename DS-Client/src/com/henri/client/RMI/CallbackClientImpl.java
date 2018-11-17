@@ -44,11 +44,11 @@ public class CallbackClientImpl extends UnicastRemoteObject implements  Callback
             GameScreen4X4Controller controller4X4 = (GameScreen4X4Controller)controller;
             controller4X4.updateButton(buttonId);
         }else if(controllerType == 2){
-            GameScreen4X6Controller controller4X6 = (GameScreen4X6Controller)controller;
-            //controller4X6.updateButton(buttonId);
-        }else if(controllerType == 3){
             GameScreen6X6Controller controller6X6 = (GameScreen6X6Controller)controller;
-            //controller4X4.updateButton(buttonId);
+            //controller6X6.updateButton(buttonId);
+        }else if(controllerType == 3){
+            GameScreen4X6Controller controller4X6 = (GameScreen4X6Controller)controller;
+            controller4X6.updateButton(buttonId);
         }
 
     }
@@ -59,11 +59,11 @@ public class CallbackClientImpl extends UnicastRemoteObject implements  Callback
             GameScreen4X4Controller controller4X4 = (GameScreen4X4Controller)controller;
             controller4X4.refreshScreen();
         }else if(controllerType == 2){
-            GameScreen4X6Controller controller4X6 = (GameScreen4X6Controller)controller;
-            //controller4X6.refreshScreen();
-        }else if(controllerType == 3){
             GameScreen6X6Controller controller6X6 = (GameScreen6X6Controller)controller;
             //controller6X6.refreshScreen();
+        }else if(controllerType == 3){
+            GameScreen4X6Controller controller4X6 = (GameScreen4X6Controller)controller;
+            controller4X6.refreshScreen();
         }
 
     }
