@@ -67,7 +67,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen6X6Controller gameScreen6X6Controller = gameScreenLoader.getController();
             gameScreen6X6Controller.setGameId(gameId);
-            //gameScreen6X6Controller.setControllerType(2);
+            gameScreen6X6Controller.setControllerType(2);
             if(!viewOnly){
                 gameScreen6X6Controller.setJoin(true);
             }
