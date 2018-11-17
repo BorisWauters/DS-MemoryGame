@@ -40,4 +40,6 @@ public interface AppServerInterface extends Remote {
     String requestGameWinner(int gameId) throws RemoteException;
 
     void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws  RemoteException;
+
+    boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException;
 }

@@ -106,6 +106,11 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
             removeCallbackGeneral(stage, getControllerId());
                 });
 
+            //Check if viewOnly
+            if(isViewOnly()){
+                notYourTurnLabel.setText("You are in view only mode!");
+            }
+
         });
 
 
@@ -118,9 +123,13 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
         updateButtonGeneral(buttonId);
     }
 
-    public void buttonClicked(ActionEvent actionEvent) throws RemoteException, InterruptedException {
+    public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            buttonClickedGeneral(actionEvent, notYourTurnLabel);
+        }
 
-        buttonClickedGeneral(actionEvent, notYourTurnLabel);
 
 
     }
@@ -198,7 +207,12 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
 
     public void goBack(ActionEvent actionEvent) throws IOException {
-        goBackGeneral(actionEvent);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            goBackGeneral(actionEvent);
+        }
+
     }
 
     public String setGameThemeText(int gameTheme) {

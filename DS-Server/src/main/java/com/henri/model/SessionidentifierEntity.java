@@ -9,7 +9,7 @@ import java.util.Objects;
 public class SessionidentifierEntity {
     private int sessionIdentifierId;
     private String sessionIdentifier;
-    private Date cancellationTime;
+    private long cancellationTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,9 +34,9 @@ public class SessionidentifierEntity {
 
     @Basic
     @Column(name = "cancellation_time")
-    public Date getCancellationTime(){return cancellationTime;}
+    public long getCancellationTime(){return cancellationTime;}
 
-    public void setCancellationTime(Date cancellationTime) {
+    public void setCancellationTime(long cancellationTime) {
         this.cancellationTime = cancellationTime;
     }
 

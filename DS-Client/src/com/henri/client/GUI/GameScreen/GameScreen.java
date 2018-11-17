@@ -1,6 +1,7 @@
 package com.henri.client.GUI.GameScreen;
 
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import com.henri.client.RMI.CallbackClientImpl;
 import com.henri.client.RMI.CallbackClientInterface;
 import javafx.application.Platform;
@@ -22,7 +23,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class GameScreen {
+public class GameScreen extends SendBack {
 
     //Algemene klasse waar de controllers kunnen van overerven
 

@@ -5,6 +5,7 @@ import com.henri.client.GUI.GameScreen4X6.GameScreen4X6Controller;
 import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
 import com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController;
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 
-public class GameDashboardScreenController implements Initializable{
+public class GameDashboardScreenController extends SendBack implements Initializable{
 
     private Scene mScene;
     private ArrayList<Integer> gameSizesJoinedGames = new ArrayList<>();
@@ -94,22 +95,32 @@ public class GameDashboardScreenController implements Initializable{
 
 
     public void newGame(ActionEvent actionEvent) throws IOException {
-        FXMLLoader gameConfigLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameConfig/GameConfigScreen.fxml"));
-        Parent gameConfigPane =  gameConfigLoader.load();
-        Scene  gameConfigScene = new Scene( gameConfigPane);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            FXMLLoader gameConfigLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameConfig/GameConfigScreen.fxml"));
+            Parent gameConfigPane =  gameConfigLoader.load();
+            Scene  gameConfigScene = new Scene( gameConfigPane);
 
-        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        primaryStage.setScene(gameConfigScene);
+            Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            primaryStage.setScene(gameConfigScene);
+        }
+
     }
 
     public void onMouseClickOwnGame(MouseEvent mouseEvent) throws IOException{
 
-        int gameSize = 0;
-        if(playerGames.getSelectionModel().getSelectedIndex() >= 0){    //check whether a valid list item has been selected
-            gameSize = gameSizesJoinedGames.get(playerGames.getSelectionModel().getSelectedIndex());
-            int gameId = gameIdentifiers.get(playerGames.getSelectionModel().getSelectedIndex());
-            sendToGameScreen(mouseEvent, gameSize, false, gameId);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(mouseEvent);
+        }else{
+            int gameSize = 0;
+            if(playerGames.getSelectionModel().getSelectedIndex() >= 0){    //check whether a valid list item has been selected
+                gameSize = gameSizesJoinedGames.get(playerGames.getSelectionModel().getSelectedIndex());
+                int gameId = gameIdentifiers.get(playerGames.getSelectionModel().getSelectedIndex());
+                sendToGameScreen(mouseEvent, gameSize, false, gameId);
+            }
         }
+
 
 
 
@@ -244,5 +255,7 @@ public class GameDashboardScreenController implements Initializable{
     public void refreshScreen(ActionEvent actionEvent){
         requestGames();
     }
+
+
 
 }

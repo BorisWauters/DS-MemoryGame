@@ -14,5 +14,8 @@ public interface SessionIdentifierRepository extends CrudRepository<Sessionident
     /*@Query("select u from UserEntity u")
     List<UserEntity> findAllUsers();*/
 
+    @Query("select s from SessionidentifierEntity  s where s.sessionIdentifierId = :sessionId")
+    SessionidentifierEntity findSessionIdentifierById(@Param("sessionId") int sessionId);
+
 
 }

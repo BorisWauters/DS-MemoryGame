@@ -2,6 +2,7 @@ package com.henri.client.GUI.GameScreen4X4;
 
 import com.henri.client.GUI.GameScreen.GameScreen;
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import com.henri.client.RMI.CallbackClientImpl;
 import com.henri.client.RMI.CallbackClientInterface;
 import javafx.application.Platform;
@@ -109,6 +110,11 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
                 removeCallbackGeneral(stage, getControllerId());
             });
 
+            //Check if viewOnly
+            if(isViewOnly()){
+                notYourTurnLabel.setText("You are in view only mode!");
+            }
+
         });
 
 
@@ -118,12 +124,17 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
 
     public void updateButton(int buttonId) {
+
         updateButtonGeneral(buttonId);
     }
 
-    public void buttonClicked(ActionEvent actionEvent) throws RemoteException, InterruptedException {
+    public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            buttonClickedGeneral(actionEvent, notYourTurnLabel);
+        }
 
-        buttonClickedGeneral(actionEvent, notYourTurnLabel);
 
 
     }
@@ -187,7 +198,12 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
 
     public void goBack(ActionEvent actionEvent) throws IOException {
-        goBackGeneral(actionEvent);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            goBackGeneral(actionEvent);
+        }
+
     }
 
     public String setGameThemeText(int gameTheme) {

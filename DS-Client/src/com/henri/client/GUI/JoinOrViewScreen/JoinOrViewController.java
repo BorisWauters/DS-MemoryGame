@@ -4,6 +4,7 @@ import com.henri.client.GUI.GameScreen4X4.GameScreen4X4Controller;
 import com.henri.client.GUI.GameScreen4X6.GameScreen4X6Controller;
 import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +15,9 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
-public class JoinOrViewController {
+public class JoinOrViewController extends SendBack {
 
     private int gameSize;
     private int gameId;
@@ -31,13 +33,23 @@ public class JoinOrViewController {
     private Button viewButton;
 
     public void join(ActionEvent actionEvent) throws IOException {
-        //when joining let user view and add him to the game for his turn (user cannot yet click on cards until it's his turn)
-        //MainClient.impl.requestJoin(gameId,MainClient.username); -> add on initialize
-        sendToGameScreen(actionEvent,false);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            //when joining let user view and add him to the game for his turn (user cannot yet click on cards until it's his turn)
+            //MainClient.impl.requestJoin(gameId,MainClient.username); -> add on initialize
+            sendToGameScreen(actionEvent,false);
+        }
+
 
     }
 
-    public void view(ActionEvent actionEvent){
+    public void view(ActionEvent actionEvent) throws IOException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            sendToGameScreen(actionEvent,true);
+        }
         //let the player view, do not add him to the game, user cannot click any cards!
     }
 

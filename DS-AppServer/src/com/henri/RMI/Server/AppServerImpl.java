@@ -185,4 +185,9 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
             }
         }
     }
+
+    @Override
+    public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException{
+        return impl.checkSessionIdentifier(sessionId, sessionIdentifier);
+    }
 }

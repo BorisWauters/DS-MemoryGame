@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.Instant;
 import java.util.*;
 
 @Component("ServerImpl")
@@ -100,13 +101,20 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         SessionidentifierEntity s = new SessionidentifierEntity();
         //set identifier to object
         s.setSessionIdentifier(sessionId);
+        s.setCancellationTime(System.currentTimeMillis());
         sessionIdentifierRepository.save(s);
         //set object to user
         userEntity.setSessionIdentifierEntity(s);
         //save user
         userEntityRepository.save(userEntity);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(sessionId);
+        sb.append(",");
+        sb.append(s.getCancellationTime());
+
         //return the sessionId
-        return sessionId;
+        return sb.toString();
     }
 
     @Override
@@ -230,6 +238,20 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         return null;
     }
 
+    @Override
+    public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException{
+        SessionidentifierEntity sessionidentifierEntity = sessionIdentifierRepository.findSessionIdentifierById(sessionId);
+        long cancellationTime = sessionidentifierEntity.getCancellationTime();
+        long currentTime = System.currentTimeMillis();
+        if (sessionidentifierEntity.getSessionIdentifier().equals(sessionIdentifier)) {
+            if(currentTime - cancellationTime > 3600000){
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public ArrayList<String> createReturnGameArray(ArrayList<GameEntity> games) {
         ArrayList<String> returnGames = new ArrayList<>();
         for (GameEntity g : games) {
@@ -289,6 +311,8 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
 
         return gameEntity;
     }
+
+
 
 
 }

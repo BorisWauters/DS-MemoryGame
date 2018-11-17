@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LoginController {
 
@@ -60,8 +62,11 @@ public class LoginController {
             credentialsLabel.setVisible(true);
         } else {
             MainClient.username = username.getText();
-            MainClient.sessionId = MainClient.impl.acquireSessionId(name);
-            System.out.println("session id: " + MainClient.sessionId);
+            String sessionConfig = MainClient.impl.acquireSessionId(name);
+            ArrayList<String> sessionConfigList = new ArrayList<>(Arrays.asList(sessionConfig.split("\\s*,\\s*")));
+            MainClient.sessionIdentifier = sessionConfigList.get(0);
+            MainClient.sessionIdentifier_Id = Integer.parseInt(sessionConfigList.get(1));
+            System.out.println("session id: " + MainClient.sessionIdentifier);
 
             FXMLLoader gameDashboardLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));
             Parent gameDashboardPane = gameDashboardLoader.load();
