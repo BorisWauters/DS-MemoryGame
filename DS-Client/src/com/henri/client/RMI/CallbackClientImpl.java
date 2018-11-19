@@ -14,7 +14,7 @@ import java.util.Map;
 public class CallbackClientImpl extends UnicastRemoteObject implements  CallbackClientInterface{
 
 
-    //Callback Client implementation
+
 
 
     private Object controller;
