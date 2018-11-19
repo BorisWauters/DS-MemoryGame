@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class CallbackClientImpl extends UnicastRemoteObject implements  CallbackClientInterface{
 
 
+    //Callback Client implementation
 
     private GameScreen4X4Controller gameScreen4X4Controller;
 
