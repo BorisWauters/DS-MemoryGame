@@ -1,34 +1,243 @@
 package com.henri.client.GUI.GameScreen6X6;
 
-public class GameScreen6X6Controller {
+import com.henri.client.GUI.GameScreen.GameScreen;
+import com.henri.client.GUI.MainClient;
+import com.henri.client.RMI.CallbackClientImpl;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
-    private boolean viewOnly = false;
-    private int gameId;
-    private boolean join = false;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.ResourceBundle;
+
+public class GameScreen6X6Controller extends GameScreen implements Initializable {
+
+    @FXML
+    private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
+
+    @FXML
+    private Button button11, button12, button13, button14, button15, button16, button17, button18, button19, button20;
+
+    @FXML
+    private Button button21, button22, button23, button24, button25, button26, button27, button28, button29;
+
+    @FXML
+    private Button button30, button31, button32, button33, button34, button35, button36;
+
+    @FXML
+    private AnchorPane ap;
+
+    @FXML
+    private Label notYourTurnLabel;
+
+    @FXML
+    private Label gameNameLabel;
+
+    @FXML
+    private Label gameThemeLabel;
+
+    @FXML
+    private Button backButton;
+
+    //ToDo: vaste paden nar relatieve paden omzetten
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Platform.runLater(() -> {
+
+            //Give the controller an ID
+            Random rand = new Random();
+            setControllerId(rand.nextInt(100000));
+
+            loadImages();
+
+            addAllButtonsToList();
+
+            tryJoinGeneral();
+
+            requestGameConfigGeneral();
 
 
-    public boolean isViewOnly() {
-        return viewOnly;
+            gameNameLabel.setText(getGameName());
+            gameThemeLabel.setText(setGameThemeText(getGameTheme()));
+
+
+            setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
+
+            mapButtonsToImagesGeneral();
+
+            updateGameFieldGeneral();
+
+            checkTurnGeneral(notYourTurnLabel);
+
+
+            if (getCardsTurnedGuessedRightInTotal() == 36) {
+                setWinner(notYourTurnLabel);
+
+            }
+
+
+            //Check if at least two users are registerd
+            if (getNumberOfUsers() < 2) {
+                for (Button b : getButtons()) {
+                    b.setDisable(true);
+                }
+                notYourTurnLabel.setText("Not enough players! Need at least 2!");
+            }
+
+            //Register callback for live updates
+            registerCallback();
+
+
+            //Set new on close handler to remove callback from app server
+            Stage stage = (Stage) ap.getScene().getWindow();
+            stage.setOnCloseRequest(event -> {
+                removeCallbackGeneral(stage, getControllerId());
+            });
+
+            //Check if viewOnly
+            if(isViewOnly()){
+                notYourTurnLabel.setText("You are in view only mode!");
+            }
+
+        });
+
+
     }
 
-    public void setViewOnly(boolean viewOnly) {
-        this.viewOnly = viewOnly;
+
+
+
+    public void updateButton(int buttonId) {
+        updateButtonGeneral(buttonId);
     }
 
-    public int getGameId() {
-        return gameId;
+    public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            buttonClickedGeneral(actionEvent, notYourTurnLabel);
+        }
+
+
+
     }
 
-    public void setGameId(int gameId) {
-        this.gameId = gameId;
+
+    public void refreshScreen(){
+        Platform.runLater(() -> {
+            refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
+        });
+
     }
 
-    public boolean isJoin() {
-        return join;
+    public void loadImages(){
+        setImages(new ArrayList<>());
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\after_effects_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_studio.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\apple_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\chrome_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\lightroom_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\photoshop_logo.PNG");
+
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\edge_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\firefox_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\react-native_logo.JPG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\dell_logo.JPG");
+
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\illustrator_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\flash_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\in_design_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\webstorm_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\bridge_logo.PNG");
+        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\premiere_pro_logo.PNG");
     }
 
-    public void setJoin(boolean join) {
-        this.join = join;
+    public void addAllButtonsToList(){
+        setButtons(new ArrayList<>());
+        getButtons().add(button1);
+        getButtons().add(button2);
+        getButtons().add(button3);
+        getButtons().add(button4);
+        getButtons().add(button5);
+        getButtons().add(button6);
+        getButtons().add(button7);
+        getButtons().add(button8);
+        getButtons().add(button9);
+        getButtons().add(button10);
+        getButtons().add(button11);
+        getButtons().add(button12);
+        getButtons().add(button13);
+        getButtons().add(button14);
+        getButtons().add(button15);
+        getButtons().add(button16);
+        getButtons().add(button17);
+        getButtons().add(button18);
+        getButtons().add(button19);
+        getButtons().add(button20);
+        getButtons().add(button21);
+        getButtons().add(button22);
+        getButtons().add(button23);
+        getButtons().add(button24);
+        getButtons().add(button25);
+        getButtons().add(button26);
+        getButtons().add(button27);
+        getButtons().add(button28);
+        getButtons().add(button29);
+        getButtons().add(button30);
+        getButtons().add(button31);
+        getButtons().add(button32);
+        getButtons().add(button33);
+        getButtons().add(button34);
+        getButtons().add(button35);
+        getButtons().add(button36);
+
+    }
+
+
+
+
+
+
+
+
+    public void registerCallback(){
+        try {
+            setCallbackObj(new CallbackClientImpl(this));
+
+            MainClient.impl.registerForCallback(getControllerId(), getCallbackObj(), getGameId());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void goBack(ActionEvent actionEvent) throws IOException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            goBackGeneral(actionEvent);
+        }
+
+    }
+
+    public String setGameThemeText(int gameTheme) {
+        if (gameTheme == 1) {
+            return "Software - theme";
+        }
+        return "Second - theme";
     }
 
 }

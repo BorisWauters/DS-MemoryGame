@@ -8,7 +8,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameConfig.GameConfigController">
+<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameConfig.GameConfigController">
     <children>
         <ToolBar prefHeight="63.0" prefWidth="800.0" styleClass="header-section" stylesheets="@../Layout.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>
@@ -45,6 +45,7 @@
             <Button fx:id="createGame" layoutX="573.0" layoutY="383.0" mnemonicParsing="false" onAction="#newGame" text="Create Game" AnchorPane.bottomAnchor="129.0" AnchorPane.leftAnchor="573.0" AnchorPane.rightAnchor="152.0" AnchorPane.topAnchor="383.0" />
             <Label fx:id="themeLabel" layoutX="719.0" layoutY="123.0" visible="false" />
             <TextField fx:id="gameName" layoutX="542.0" layoutY="285.0" promptText="Game Name" />
+            <Label fx:id="gameLabel" layoutX="542.0" layoutY="260.0" styleClass="content-section" visible="false" />
          </children></AnchorPane>
     </children>
 

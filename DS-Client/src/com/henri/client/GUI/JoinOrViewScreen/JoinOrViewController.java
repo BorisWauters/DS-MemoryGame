@@ -4,6 +4,7 @@ import com.henri.client.GUI.GameScreen4X4.GameScreen4X4Controller;
 import com.henri.client.GUI.GameScreen4X6.GameScreen4X6Controller;
 import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class JoinOrViewController {
+public class JoinOrViewController extends SendBack {
 
     private int gameSize;
     private int gameId;
@@ -31,13 +32,23 @@ public class JoinOrViewController {
     private Button viewButton;
 
     public void join(ActionEvent actionEvent) throws IOException {
-        //when joining let user view and add him to the game for his turn (user cannot yet click on cards until it's his turn)
-        //MainClient.impl.requestJoin(gameId,MainClient.username); -> add on initialize
-        sendToGameScreen(actionEvent,false);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            //when joining let user view and add him to the game for his turn (user cannot yet click on cards until it's his turn)
+            //MainClient.impl.requestJoin(gameId,MainClient.username); -> add on initialize
+            sendToGameScreen(actionEvent,false);
+        }
+
 
     }
 
-    public void view(ActionEvent actionEvent){
+    public void view(ActionEvent actionEvent) throws IOException {
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            sendToGameScreen(actionEvent,true);
+        }
         //let the player view, do not add him to the game, user cannot click any cards!
     }
 
@@ -49,6 +60,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X4Controller gameScreen4X4Controller = gameScreenLoader.getController();
             gameScreen4X4Controller.setGameId(gameId);
+            gameScreen4X4Controller.setControllerType(1);
             if(!viewOnly){
                 gameScreen4X4Controller.setJoin(true);
             }
@@ -66,6 +78,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen6X6Controller gameScreen6X6Controller = gameScreenLoader.getController();
             gameScreen6X6Controller.setGameId(gameId);
+            gameScreen6X6Controller.setControllerType(2);
             if(!viewOnly){
                 gameScreen6X6Controller.setJoin(true);
             }
@@ -82,6 +95,7 @@ public class JoinOrViewController {
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
             gameScreen4X6Controller.setGameId(gameId);
+            gameScreen4X6Controller.setControllerType(3);
             if(!viewOnly){
                 gameScreen4X6Controller.setJoin(true);
             }

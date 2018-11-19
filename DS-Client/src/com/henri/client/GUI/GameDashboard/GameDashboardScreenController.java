@@ -5,6 +5,7 @@ import com.henri.client.GUI.GameScreen4X6.GameScreen4X6Controller;
 import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
 import com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController;
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 
-public class GameDashboardScreenController implements Initializable{
+public class GameDashboardScreenController extends SendBack implements Initializable{
 
     private Scene mScene;
     private ArrayList<Integer> gameSizesJoinedGames = new ArrayList<>();
@@ -41,7 +42,7 @@ public class GameDashboardScreenController implements Initializable{
     public void setScene(Scene mScene){this.mScene = mScene;}
 
     @FXML
-    private Button newGame;
+    private Button newGame,refresh;
 
     @FXML
     private ListView playerGames;
@@ -52,33 +53,7 @@ public class GameDashboardScreenController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //get current games for the user
-        try {
-            ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
-                        //items = createObservable(playerGamesList, gameSizesJoinedGames, numberOfPLayers, gameIdentifiers);
-
-            ObservableList<String> items = FXCollections.observableArrayList();
-            createObservable(playerGamesList, items, gameIdentifiers, numberOfPLayers, gameSizesJoinedGames);
-
-            playerGames.setItems(items);
-            System.out.println(items.toString());
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-
-        //Get all other games which the user hasn't joined
-        try{
-            ArrayList<String> playerGamesList = MainClient.impl.requestAllGames(MainClient.username);
-
-            ObservableList<String> items = FXCollections.observableArrayList();
-            createObservable(playerGamesList, items, gameIdentifiersAllGames, numberOfPlayersAllGames, gameSizesAllGames);
-
-
-            allGames.setItems(items);
-
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
+        requestGames();
     }
 
     public void createObservable(ArrayList<String> playerGamesList, ObservableList<String> items, ArrayList<Integer> gameIdentifiers, ArrayList<Integer> numberOfPLayers, ArrayList<Integer> gameSizesJoinedGames) {
@@ -120,22 +95,32 @@ public class GameDashboardScreenController implements Initializable{
 
 
     public void newGame(ActionEvent actionEvent) throws IOException {
-        FXMLLoader gameConfigLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameConfig/GameConfigScreen.fxml"));
-        Parent gameConfigPane =  gameConfigLoader.load();
-        Scene  gameConfigScene = new Scene( gameConfigPane);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(actionEvent);
+        }else{
+            FXMLLoader gameConfigLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameConfig/GameConfigScreen.fxml"));
+            Parent gameConfigPane =  gameConfigLoader.load();
+            Scene  gameConfigScene = new Scene( gameConfigPane);
 
-        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-        primaryStage.setScene(gameConfigScene);
+            Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            primaryStage.setScene(gameConfigScene);
+        }
+
     }
 
     public void onMouseClickOwnGame(MouseEvent mouseEvent) throws IOException{
 
-        int gameSize = 0;
-        if(playerGames.getSelectionModel().getSelectedIndex() >= 0){    //check whether a valid list item has been selected
-            gameSize = gameSizesJoinedGames.get(playerGames.getSelectionModel().getSelectedIndex());
-            int gameId = gameIdentifiers.get(playerGames.getSelectionModel().getSelectedIndex());
-            sendToGameScreen(mouseEvent, gameSize, false, gameId);
+        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+            sendBackToLogin(mouseEvent);
+        }else{
+            int gameSize = 0;
+            if(playerGames.getSelectionModel().getSelectedIndex() >= 0){    //check whether a valid list item has been selected
+                gameSize = gameSizesJoinedGames.get(playerGames.getSelectionModel().getSelectedIndex());
+                int gameId = gameIdentifiers.get(playerGames.getSelectionModel().getSelectedIndex());
+                sendToGameScreen(mouseEvent, gameSize, false, gameId);
+            }
         }
+
 
 
 
@@ -186,6 +171,7 @@ public class GameDashboardScreenController implements Initializable{
             Parent gameScreenPane =  gameScreenLoader.load();
             GameScreen4X4Controller gameScreen4X4Controller = gameScreenLoader.getController();
             gameScreen4X4Controller.setGameId(gameId);
+            gameScreen4X4Controller.setControllerType(1);
             if(viewOnly){
                 gameScreen4X4Controller.setViewOnly(true);
             }
@@ -203,6 +189,7 @@ public class GameDashboardScreenController implements Initializable{
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen6X6Controller gameScreen6X6Controller = gameScreenLoader.getController();
             gameScreen6X6Controller.setGameId(gameId);
+            gameScreen6X6Controller.setControllerType(2);
             if(viewOnly){
                 gameScreen6X6Controller.setViewOnly(true);
             }
@@ -216,6 +203,7 @@ public class GameDashboardScreenController implements Initializable{
             Scene  gameScreenScene = new Scene( gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
             gameScreen4X6Controller.setGameId(gameId);
+            gameScreen4X6Controller.setControllerType(3);
             if(viewOnly){
                 gameScreen4X6Controller.setViewOnly(true);
             }
@@ -233,6 +221,41 @@ public class GameDashboardScreenController implements Initializable{
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(homeScreenScene);
     }
+
+    public void requestGames(){
+        try {
+            ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
+            //items = createObservable(playerGamesList, gameSizesJoinedGames, numberOfPLayers, gameIdentifiers);
+
+            ObservableList<String> items = FXCollections.observableArrayList();
+            createObservable(playerGamesList, items, gameIdentifiers, numberOfPLayers, gameSizesJoinedGames);
+
+            playerGames.setItems(items);
+            System.out.println(items.toString());
+
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        //Get all other games which the user hasn't joined
+        try{
+            ArrayList<String> playerGamesList = MainClient.impl.requestAllGames(MainClient.username);
+
+            ObservableList<String> items = FXCollections.observableArrayList();
+            createObservable(playerGamesList, items, gameIdentifiersAllGames, numberOfPlayersAllGames, gameSizesAllGames);
+
+
+            allGames.setItems(items);
+
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void refreshScreen(ActionEvent actionEvent){
+        requestGames();
+    }
+
 
 
 }

@@ -15,8 +15,9 @@ import java.rmi.registry.Registry;
 public class MainClient extends Application {
 
     public static AppServerInterface impl;
-    public static String sessionId;
+    public static String sessionIdentifier;
     public static String username;
+    public static int sessionIdentifier_Id;
 
     /**
      * Method used to display HomeScreen.

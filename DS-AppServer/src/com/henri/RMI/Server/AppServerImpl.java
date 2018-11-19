@@ -122,7 +122,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
     }
 
     @Override
-    public void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score) throws RemoteException {
+    public void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score, int controllerType) throws RemoteException {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < gamePositions.size(); i++) {
             sb.append(gamePositions.get(i));
@@ -136,7 +136,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
                 int gameIdFromList = (int)entry.getValue().get(0);
                 if(gameIdFromList == gameId){
                     CallbackClientInterface callbackClientObject = (CallbackClientInterface)entry.getValue().get(1);
-                    callbackClientObject.refreshScreen();
+                    callbackClientObject.refreshScreen(controllerType);
                 }
             }
         }
@@ -171,18 +171,23 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
     }
 
     @Override
-    public String requestGameWinner(int gameId) throws RemoteException{
+    public ArrayList<String> requestGameWinner(int gameId) throws RemoteException{
        return impl.requestGameWinner(gameId);
     }
 
     @Override
-    public void updateCardFlip(int buttonId, int gameId, int controllerId) throws RemoteException{
+    public void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws RemoteException{
         for(Map.Entry<Integer,ArrayList<Object>> entry : clientList.entrySet()){
             int gameIdFromList = (int)entry.getValue().get(0);
             if(gameIdFromList == gameId && controllerId != entry.getKey()){
                 CallbackClientInterface callbackClientObject = (CallbackClientInterface)entry.getValue().get(1);
-                callbackClientObject.updateCardFlip(buttonId);
+                callbackClientObject.updateCardFlip(buttonId, controllerType);
             }
         }
+    }
+
+    @Override
+    public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException{
+        return impl.checkSessionIdentifier(sessionId, sessionIdentifier);
     }
 }
