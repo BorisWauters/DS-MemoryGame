@@ -6,6 +6,9 @@ import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
 import com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController;
 import com.henri.client.GUI.MainClient;
 import com.henri.client.GUI.SendBack;
+import com.henri.client.GUI.tableItem;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +19,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -26,6 +32,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
+
 
 
 public class GameDashboardScreenController extends SendBack implements Initializable{
@@ -50,10 +57,17 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     @FXML
     private ListView allGames;
 
+    @FXML
+    private TableView<tableItem> topPlayersTable;
+
+    @FXML private TableColumn<tableItem,String> scoreColumn;
+    @FXML private TableColumn<tableItem,String> usernameColumn;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //get current games for the user
         requestGames();
+        requestTopPlayers();
     }
 
     public void createObservable(ArrayList<String> playerGamesList, ObservableList<String> items, ArrayList<Integer> gameIdentifiers, ArrayList<Integer> numberOfPLayers, ArrayList<Integer> gameSizesJoinedGames) {
@@ -256,6 +270,37 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         requestGames();
     }
 
+    public void requestTopPlayers(){
+        //scoreColumn
+        scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+
+        //usernameColumn
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        ObservableList<tableItem> characters = FXCollections.observableArrayList();
+        ArrayList<String> topPlayers = null;
+        try {
+            topPlayers = MainClient.impl.requestTopPlayers();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            //possibly set a label
+        }
+
+        if(topPlayers != null){
+            for(int i = 0; i < topPlayers.size(); i++){
+                characters.add(new tableItem(topPlayers.get(i),(topPlayers.get(i+1))));
+                i++;
+            }
+        }
+        topPlayersTable.setItems(characters);
+    }
+
+
+
+
+
+
 
 
 }
+
+

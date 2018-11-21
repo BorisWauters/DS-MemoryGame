@@ -1,11 +1,12 @@
 package com.henri.model;
 
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "ds")
-public class UserEntity {
+public class UserEntity{
     private int userId, score;
     private String username;
     private String password;

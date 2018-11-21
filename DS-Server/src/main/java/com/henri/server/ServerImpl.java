@@ -243,6 +243,23 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         return winnerNames;
     }
 
+    @Override
+    public ArrayList<String> requestTopPlayers() throws RemoteException{
+        ArrayList<String> winners = new ArrayList<>();
+        ArrayList<UserEntity> users = (ArrayList<UserEntity>) userEntityRepository.findAll();
+        Collections.sort(users, new UserComparator());
+        int size = (users.size() < 10 ? users.size() : 10);
+        for(int i = 0; i < size; i++){
+            winners.add(users.get(i).getUsername());
+            winners.add(String.valueOf(users.get(i).getScore()));
+        }
+        return winners;
+    }
+
+
+
+
+
     public ArrayList<UserEntity> findMaxScore(ArrayList<Integer> scores, ArrayList<Integer> players){
         ArrayList<UserEntity> winners = new ArrayList<>();
 

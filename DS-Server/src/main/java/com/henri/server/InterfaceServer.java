@@ -37,4 +37,6 @@ public interface InterfaceServer extends Remote {
     ArrayList<String> requestGameWinner(int gameId) throws RemoteException;
 
     boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException;
+
+    ArrayList<String> requestTopPlayers() throws RemoteException;
 }

@@ -112,7 +112,7 @@ public class GameScreen extends SendBack {
             for (Button button : buttons) {
                 button.setDisable(true);
             }
-            TimeUnit.MILLISECONDS.sleep(500);
+
             //check whether the images are the same
 
             int buttonId2 = Integer.parseInt(pressedButton.getId());

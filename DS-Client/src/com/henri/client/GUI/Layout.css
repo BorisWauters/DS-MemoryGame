@@ -25,6 +25,12 @@
     -fx-text-fill: white;
 }
 
+.header-section Button:hover{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
 
 .list-cell:filled:hover{
     -fx-background-color: teal;
@@ -68,6 +74,11 @@
 .content-section Button{
     -fx-background-color: teal;
     -fx-text-fill: white;
+}
+.content-section Button:hover{
+    -fx-background-color: teal;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
 }
 
 .content-section PasswordField{
