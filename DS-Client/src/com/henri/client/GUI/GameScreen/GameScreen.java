@@ -27,6 +27,8 @@ public class GameScreen extends SendBack {
 
     //Algemene klasse waar de controllers kunnen van overerven
 
+    //todo: label met username
+
     private int controllerId, controllerType;
     private boolean viewOnly = false;
 

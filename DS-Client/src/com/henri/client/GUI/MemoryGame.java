@@ -21,7 +21,7 @@ public class MemoryGame extends JFrame {
             "images-set1/edge_logo.JPG", "images-set1/firefox_logo.JPG", "images-set1/flash_logo.PNG",
             "images-set1/illustrator_logo.PNG", "images-set1/in_design_logo.PNG", "images-set1/IntelliJ_IDEA_Logo.JPG",
             "images-set1/lightroom_logo.PNG", "images-set1/photoshop_logo.PNG", "images-set1/premiere_pro_logo.PNG",
-            "images-set1/react-native.JPG", "images-set1/webstorm_logo.JPG"};
+            "images-set1/react-native_logo.JPG", "images-set1/webstorm_logo.JPG"};
     static JButton buttons[];
     ImageIcon closedIcon;
     int numButtons;

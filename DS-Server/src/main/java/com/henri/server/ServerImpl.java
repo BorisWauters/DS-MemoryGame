@@ -217,6 +217,9 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
 
     @Override
     public ArrayList<String> requestGameWinner(int gameId) throws RemoteException {
+
+        //todo: update score to user entity
+
         GameEntity gameEntity = gameRepository.findGameEntityByGameId(gameId);
         int scoreUserOne = (gameEntity.getUserOneScore());
         int scoreUserTwo = (gameEntity.getUserTwoScore());
@@ -237,19 +240,19 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         ArrayList<UserEntity> winners = findMaxScore(scores, players);
 
         ArrayList<String> winnerNames = new ArrayList<>();
-        for(int i = 0; i < winners.size(); i++){
+        for (int i = 0; i < winners.size(); i++) {
             winnerNames.add(winners.get(i).getUsername());
         }
         return winnerNames;
     }
 
     @Override
-    public ArrayList<String> requestTopPlayers() throws RemoteException{
+    public ArrayList<String> requestTopPlayers() throws RemoteException {
         ArrayList<String> winners = new ArrayList<>();
         ArrayList<UserEntity> users = (ArrayList<UserEntity>) userEntityRepository.findAll();
         Collections.sort(users, new UserComparator());
         int size = (users.size() < 10 ? users.size() : 10);
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             winners.add(users.get(i).getUsername());
             winners.add(String.valueOf(users.get(i).getScore()));
         }
@@ -257,35 +260,32 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
     }
 
 
-
-
-
-    public ArrayList<UserEntity> findMaxScore(ArrayList<Integer> scores, ArrayList<Integer> players){
+    public ArrayList<UserEntity> findMaxScore(ArrayList<Integer> scores, ArrayList<Integer> players) {
         ArrayList<UserEntity> winners = new ArrayList<>();
 
         int max = 0;
-        for(int i = 0; i < scores.size(); i++){
-            if(scores.get(i) > max){
+        for (int i = 0; i < scores.size(); i++) {
+            if (scores.get(i) > max) {
                 winners.clear();
                 max = scores.get(i);
                 winners.add(userEntityRepository.findUserEntityByUserId(players.get(i)));
-            }else if(scores.get(i) == max){
+            } else if (scores.get(i) == max) {
                 winners.add(userEntityRepository.findUserEntityByUserId(players.get(i)));
             }
         }
-        for(UserEntity userEntity : winners){
+        for (UserEntity userEntity : winners) {
             userEntity.setScore(max);
         }
         return winners;
     }
 
     @Override
-    public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException{
+    public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException {
         SessionIdentifierEntity sessionidentifierEntity = sessionIdentifierRepository.findSessionIdentifierById(sessionId);
         long cancellationTime = sessionidentifierEntity.getCancellationTime();
         long currentTime = System.currentTimeMillis();
         if (sessionidentifierEntity.getSessionIdentifier().equals(sessionIdentifier)) {
-            if(currentTime - cancellationTime > 3600000){
+            if (currentTime - cancellationTime > 3600000) {
                 return false;
             }
             return true;
@@ -352,8 +352,6 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
 
         return gameEntity;
     }
-
-
 
 
 }

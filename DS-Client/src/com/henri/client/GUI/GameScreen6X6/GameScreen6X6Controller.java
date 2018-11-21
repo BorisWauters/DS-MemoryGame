@@ -165,7 +165,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
         getImages().add(path + "\\DS-Client\\images-set1\\illustrator_logo.PNG");
         getImages().add(path + "\\DS-Client\\images-set1\\flash_logo.PNG");
         getImages().add(path + "\\DS-Client\\images-set1\\in_design_logo.PNG");
-        getImages().add(path + "\\DS-Client\\images-set1\\webstorm_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\webstorm_logo.JPG");
         getImages().add(path + "\\DS-Client\\images-set1\\bridge_logo.PNG");
         getImages().add(path + "\\DS-Client\\images-set1\\premiere_pro_logo.PNG");
     }
