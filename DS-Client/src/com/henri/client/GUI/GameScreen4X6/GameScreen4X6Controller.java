@@ -49,7 +49,6 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
     @FXML
     private Button backButton;
 
-    //ToDo: vaste paden nar relatieve paden omzetten
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

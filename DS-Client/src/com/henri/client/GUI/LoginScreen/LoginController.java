@@ -1,5 +1,6 @@
 package com.henri.client.GUI.LoginScreen;
 
+import com.henri.client.GUI.GameDashboard.GameDashboardScreenController;
 import com.henri.client.GUI.MainClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -9,11 +9,11 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameDashboard.GameDashboardScreenController">
+<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameDashboard.GameDashboardScreenController">
     <children>
         <ToolBar prefHeight="63.0" prefWidth="800.0" styleClass="header-section" stylesheets="@../Layout.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>
-                <Label text="Memory Game" />
+                <Label fx:id="usernameLabel" text="Memory Game" />
                 <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" text="Log Out" />
                 <Button fx:id="refresh" mnemonicParsing="false" onAction="#refreshScreen" text="Refresh" />
                 <Button fx:id="newGame" layoutX="14.0" layoutY="83.0" mnemonicParsing="false" onAction="#newGame" text="New Game" />

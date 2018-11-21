@@ -70,7 +70,7 @@ public class GameConfigController extends SendBack {
             //Checking if only one checkbox per section has been marked
 
             boolean inputCorrect = true;
-
+            //TODO ook controleren dater minstens een gechecked is
             if((twoPlayers.isSelected() && threePlayers.isSelected()) || (threePlayers.isSelected() && fourPlayers.isSelected()) || (twoPlayers.isSelected() && fourPlayers.isSelected())){
                 playerLabel.setText(" Only select one box! ");
                 playerLabel.setVisible(true);

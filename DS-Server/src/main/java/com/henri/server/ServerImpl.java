@@ -218,7 +218,6 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
     @Override
     public ArrayList<String> requestGameWinner(int gameId) throws RemoteException {
 
-        //todo: update score to user entity
 
         GameEntity gameEntity = gameRepository.findGameEntityByGameId(gameId);
         int scoreUserOne = (gameEntity.getUserOneScore());
@@ -241,6 +240,7 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
 
         ArrayList<String> winnerNames = new ArrayList<>();
         for (int i = 0; i < winners.size(); i++) {
+            winners.get(i).setScore(winners.get(i).getScore() + 1);
             winnerNames.add(winners.get(i).getUsername());
         }
         return winnerNames;

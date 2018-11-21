@@ -17,10 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -31,11 +28,11 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
 import javafx.fxml.Initializable;
 
 
-
-public class GameDashboardScreenController extends SendBack implements Initializable{
+public class GameDashboardScreenController extends SendBack implements Initializable {
 
     private Scene mScene;
     private ArrayList<Integer> gameSizesJoinedGames = new ArrayList<>();
@@ -46,10 +43,13 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     private ArrayList<Integer> gameIdentifiersAllGames = new ArrayList<>();
     private ArrayList<Integer> numberOfPlayersAllGames = new ArrayList<>();
 
-    public void setScene(Scene mScene){this.mScene = mScene;}
+    public void setScene(Scene mScene) {
+        this.mScene = mScene;
+    }
+
 
     @FXML
-    private Button newGame,refresh;
+    private Button newGame, refresh;
 
     @FXML
     private ListView playerGames;
@@ -58,20 +58,26 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     private ListView allGames;
 
     @FXML
+    private Label usernameLabel;
+
+    @FXML
     private TableView<tableItem> topPlayersTable;
 
-    @FXML private TableColumn<tableItem,String> scoreColumn;
-    @FXML private TableColumn<tableItem,String> usernameColumn;
+    @FXML
+    private TableColumn<tableItem, String> scoreColumn;
+    @FXML
+    private TableColumn<tableItem, String> usernameColumn;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //get current games for the user
         requestGames();
         requestTopPlayers();
+        usernameLabel.setText(" Welcome " + MainClient.username + " ");
     }
 
     public void createObservable(ArrayList<String> playerGamesList, ObservableList<String> items, ArrayList<Integer> gameIdentifiers, ArrayList<Integer> numberOfPLayers, ArrayList<Integer> gameSizesJoinedGames) {
-        for(int i = 0; i < playerGamesList.size(); i++){
+        for (int i = 0; i < playerGamesList.size(); i++) {
             StringBuffer sb = new StringBuffer();
             sb.append(playerGamesList.get(i));  //extract game id
             gameIdentifiers.add(Integer.parseInt(playerGamesList.get(i)));
@@ -88,18 +94,18 @@ public class GameDashboardScreenController extends SendBack implements Initializ
             numberOfPLayers.add(Integer.parseInt(playerGamesList.get(i)));
             i++;
             sb.append(" | ");
-            if(playerGamesList.get(i).equals("1")) sb.append("Software Theme");     //extract theme
-            else if(playerGamesList.get(i).equals("2")) sb.append("Second theme");
+            if (playerGamesList.get(i).equals("1")) sb.append("Software Theme");     //extract theme
+            else if (playerGamesList.get(i).equals("2")) sb.append("Second theme");
             items.add(sb.toString());
             i++;
             sb.append(" | ");
-            if(playerGamesList.get(i).equals("32")) {   //32 because 16 icons and 16 times true/false
+            if (playerGamesList.get(i).equals("32")) {   //32 because 16 icons and 16 times true/false
                 sb.append("4X4");
                 gameSizesJoinedGames.add(1);
-            }else if(playerGamesList.get(i).equals("72")){
+            } else if (playerGamesList.get(i).equals("72")) {
                 sb.append("6X6");
                 gameSizesJoinedGames.add(2);
-            }else if (playerGamesList.get(i).equals("48")) {
+            } else if (playerGamesList.get(i).equals("48")) {
                 sb.append("4X6");
                 gameSizesJoinedGames.add(3);
             }
@@ -109,33 +115,31 @@ public class GameDashboardScreenController extends SendBack implements Initializ
 
 
     public void newGame(ActionEvent actionEvent) throws IOException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             FXMLLoader gameConfigLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameConfig/GameConfigScreen.fxml"));
-            Parent gameConfigPane =  gameConfigLoader.load();
-            Scene  gameConfigScene = new Scene( gameConfigPane);
+            Parent gameConfigPane = gameConfigLoader.load();
+            Scene gameConfigScene = new Scene(gameConfigPane);
 
-            Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+            Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameConfigScene);
         }
 
     }
 
-    public void onMouseClickOwnGame(MouseEvent mouseEvent) throws IOException{
+    public void onMouseClickOwnGame(MouseEvent mouseEvent) throws IOException {
 
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(mouseEvent);
-        }else{
+        } else {
             int gameSize = 0;
-            if(playerGames.getSelectionModel().getSelectedIndex() >= 0){    //check whether a valid list item has been selected
+            if (playerGames.getSelectionModel().getSelectedIndex() >= 0) {    //check whether a valid list item has been selected
                 gameSize = gameSizesJoinedGames.get(playerGames.getSelectionModel().getSelectedIndex());
                 int gameId = gameIdentifiers.get(playerGames.getSelectionModel().getSelectedIndex());
                 sendToGameScreen(mouseEvent, gameSize, false, gameId);
             }
         }
-
-
 
 
     }
@@ -147,30 +151,30 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         //See link for passing parameters to other controller: https://stackoverflow.com/questions/14187963/passing-parameters-javafx-fxml
         System.out.println("function entered");
         //check number of players in the selected game
-        if(allGames.getSelectionModel().getSelectedIndex() >= 0){
+        if (allGames.getSelectionModel().getSelectedIndex() >= 0) {
             int selectedListItem = allGames.getSelectionModel().getSelectedIndex();
             System.out.println(selectedListItem);
-            int numberOfPlayersInGame = numberOfPlayersAllGames.get(2*selectedListItem);
-            int maxNumberOfPlayers = (numberOfPlayersAllGames.get((2*selectedListItem)+1));
+            int numberOfPlayersInGame = numberOfPlayersAllGames.get(2 * selectedListItem);
+            int maxNumberOfPlayers = (numberOfPlayersAllGames.get((2 * selectedListItem) + 1));
             int gameSize = gameSizesAllGames.get(selectedListItem);
             int gameId = gameIdentifiersAllGames.get(selectedListItem);
 
             //If game is full
-            if(numberOfPlayersInGame == maxNumberOfPlayers){
+            if (numberOfPlayersInGame == maxNumberOfPlayers) {
                 //send to view only screen
 
                 sendToGameScreen(mouseEvent, gameSize, true, gameId);
 
-            }else if(numberOfPlayersInGame < maxNumberOfPlayers){
+            } else if (numberOfPlayersInGame < maxNumberOfPlayers) {
                 //if game is not full, send to decision screen: view or join
                 FXMLLoader joinOrViewLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/JoinOrViewScreen/JoinOrViewScreen.fxml"));
-                Parent joinOrViewScreenPane =  joinOrViewLoader.load();
-                Scene joinOrViewScreenScene = new Scene( joinOrViewScreenPane);
+                Parent joinOrViewScreenPane = joinOrViewLoader.load();
+                Scene joinOrViewScreenScene = new Scene(joinOrViewScreenPane);
                 JoinOrViewController joinOrViewController = joinOrViewLoader.getController();
                 joinOrViewController.setGameSize(gameSize);
                 joinOrViewController.setGameId(gameId);
 
-                Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+                Stage primaryStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
                 primaryStage.setScene(joinOrViewScreenScene);
             }
         }
@@ -178,56 +182,55 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     }
 
     public void sendToGameScreen(MouseEvent mouseEvent, int gameSize, boolean viewOnly, int gameId) throws IOException {
-        if(gameSize == 1){
+        if (gameSize == 1) {
             System.out.println("Game Size: 1");
             FXMLLoader gameScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameScreen4X4/GameScreen4X4.fxml"));
 
-            Parent gameScreenPane =  gameScreenLoader.load();
+            Parent gameScreenPane = gameScreenLoader.load();
             GameScreen4X4Controller gameScreen4X4Controller = gameScreenLoader.getController();
             gameScreen4X4Controller.setGameId(gameId);
             gameScreen4X4Controller.setControllerType(1);
-            if(viewOnly){
+            if (viewOnly) {
                 gameScreen4X4Controller.setViewOnly(true);
             }
 
-            Scene  gameScreenScene = new Scene( gameScreenPane);
+            Scene gameScreenScene = new Scene(gameScreenPane);
 
 
-
-            Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage primaryStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);
-        }else if(gameSize == 2){
+        } else if (gameSize == 2) {
             System.out.println("Game Size: 2");
             FXMLLoader gameScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameScreen6X6/GameScreen6X6.fxml"));
-            Parent gameScreenPane =  gameScreenLoader.load();
-            Scene  gameScreenScene = new Scene( gameScreenPane);
+            Parent gameScreenPane = gameScreenLoader.load();
+            Scene gameScreenScene = new Scene(gameScreenPane);
             GameScreen6X6Controller gameScreen6X6Controller = gameScreenLoader.getController();
             gameScreen6X6Controller.setGameId(gameId);
             gameScreen6X6Controller.setControllerType(2);
-            if(viewOnly){
+            if (viewOnly) {
                 gameScreen6X6Controller.setViewOnly(true);
             }
 
-            Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage primaryStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);
-        }else if(gameSize == 3){
+        } else if (gameSize == 3) {
             System.out.println("Game Size: 3");
             FXMLLoader gameScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameScreen4X6/GameScreen4X6.fxml"));
-            Parent gameScreenPane =  gameScreenLoader.load();
-            Scene  gameScreenScene = new Scene( gameScreenPane);
+            Parent gameScreenPane = gameScreenLoader.load();
+            Scene gameScreenScene = new Scene(gameScreenPane);
             GameScreen4X6Controller gameScreen4X6Controller = gameScreenLoader.getController();
             gameScreen4X6Controller.setGameId(gameId);
             gameScreen4X6Controller.setControllerType(3);
-            if(viewOnly){
+            if (viewOnly) {
                 gameScreen4X6Controller.setViewOnly(true);
             }
 
-            Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage primaryStage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameScreenScene);
         }
     }
 
-    public void goBack(ActionEvent actionEvent) throws IOException{
+    public void goBack(ActionEvent actionEvent) throws IOException {
         FXMLLoader homeScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/HomeScreen/HomeScreen.fxml"));
         Parent homeScreenPane = homeScreenLoader.load();
         Scene homeScreenScene = new Scene(homeScreenPane);
@@ -236,7 +239,7 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         primaryStage.setScene(homeScreenScene);
     }
 
-    public void requestGames(){
+    public void requestGames() {
         try {
             ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
             //items = createObservable(playerGamesList, gameSizesJoinedGames, numberOfPLayers, gameIdentifiers);
@@ -252,7 +255,7 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         }
 
         //Get all other games which the user hasn't joined
-        try{
+        try {
             ArrayList<String> playerGamesList = MainClient.impl.requestAllGames(MainClient.username);
 
             ObservableList<String> items = FXCollections.observableArrayList();
@@ -261,16 +264,16 @@ public class GameDashboardScreenController extends SendBack implements Initializ
 
             allGames.setItems(items);
 
-        }catch (RemoteException e){
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public void refreshScreen(ActionEvent actionEvent){
+    public void refreshScreen(ActionEvent actionEvent) {
         requestGames();
     }
 
-    public void requestTopPlayers(){
+    public void requestTopPlayers() {
         //scoreColumn
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 
@@ -285,21 +288,14 @@ public class GameDashboardScreenController extends SendBack implements Initializ
             //possibly set a label
         }
 
-        if(topPlayers != null){
-            for(int i = 0; i < topPlayers.size(); i++){
-                characters.add(new tableItem(topPlayers.get(i),(topPlayers.get(i+1))));
+        if (topPlayers != null) {
+            for (int i = 0; i < topPlayers.size(); i++) {
+                characters.add(new tableItem(topPlayers.get(i), (topPlayers.get(i + 1))));
                 i++;
             }
         }
         topPlayersTable.setItems(characters);
     }
-
-
-
-
-
-
-
 
 }
 
