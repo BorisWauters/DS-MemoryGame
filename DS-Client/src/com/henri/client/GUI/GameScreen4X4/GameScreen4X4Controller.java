@@ -20,7 +20,7 @@ import java.util.*;
 
 public class GameScreen4X4Controller extends GameScreen implements Initializable{
 
-
+    private String path;
 
 
     @FXML
@@ -54,6 +54,8 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
             Random rand = new Random();
             setControllerId(rand.nextInt(100000));
 
+            path = System.getProperty("user.dir");
+
             loadImages();
 
             addAllButtonsToList();
@@ -66,8 +68,9 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
             gameNameLabel.setText(getGameName());
             gameThemeLabel.setText(setGameThemeText(getGameTheme()));
 
+            setClosedFile(new File(path + "\\DS-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
-            setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
+            //setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
             mapButtonsToImagesGeneral();
 
@@ -132,21 +135,25 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
     public void refreshScreen(){
         Platform.runLater(() -> {
-            refreshScreenGeneral(notYourTurnLabel,getGamePositions().size());
+            try {
+                refreshScreenGeneral(notYourTurnLabel,getGamePositions().size());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
     }
 
     public void loadImages(){
         setImages(new ArrayList<>());
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\after_effects_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_studio.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\apple_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\chrome_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\lightroom_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\photoshop_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_studio.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\apple_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\chrome_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\lightroom_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\photoshop_logo.PNG");
     }
 
     public void addAllButtonsToList(){

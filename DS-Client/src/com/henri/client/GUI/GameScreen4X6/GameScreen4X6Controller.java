@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class GameScreen4X6Controller  extends GameScreen implements Initializable {
 
+    private String path;
 
     @FXML
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
@@ -58,6 +59,8 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
             Random rand = new Random();
             setControllerId(rand.nextInt(100000));
 
+            path = System.getProperty("user.dir");
+
             loadImages();
 
             addAllButtonsToList();
@@ -71,7 +74,7 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
             gameThemeLabel.setText(setGameThemeText(getGameTheme()));
 
 
-            setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
+            setClosedFile(new File(path + "\\DS-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
             mapButtonsToImagesGeneral();
 
@@ -135,26 +138,30 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
     public void refreshScreen(){
         Platform.runLater(() -> {
-            refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
+            try {
+                refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
     }
 
     public void loadImages(){
         setImages(new ArrayList<>());
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\after_effects_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_studio.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\apple_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\chrome_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\lightroom_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\photoshop_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_studio.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\apple_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\chrome_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\lightroom_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\photoshop_logo.PNG");
 
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\edge_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\firefox_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\react-native_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\dell_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\edge_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\firefox_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\react-native_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\dell_logo.JPG");
     }
 
     public void addAllButtonsToList(){

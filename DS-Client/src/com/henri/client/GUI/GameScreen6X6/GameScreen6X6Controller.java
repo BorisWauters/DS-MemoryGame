@@ -22,6 +22,8 @@ import java.util.ResourceBundle;
 
 public class GameScreen6X6Controller extends GameScreen implements Initializable {
 
+    private String path;
+
     @FXML
     private Button button1, button2, button3, button4, button5, button6, button7, button8, button9, button10;
 
@@ -59,6 +61,8 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
             Random rand = new Random();
             setControllerId(rand.nextInt(100000));
 
+            path = System.getProperty("user.dir");
+
             loadImages();
 
             addAllButtonsToList();
@@ -72,7 +76,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
             gameThemeLabel.setText(setGameThemeText(getGameTheme()));
 
 
-            setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
+            setClosedFile(new File(path + "\\DS-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
             mapButtonsToImagesGeneral();
 
@@ -106,7 +110,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
             });
 
             //Check if viewOnly
-            if(isViewOnly()){
+            if (isViewOnly()) {
                 notYourTurnLabel.setText("You are in view only mode!");
             }
 
@@ -116,56 +120,57 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
     }
 
 
-
-
     public void updateButton(int buttonId) {
         updateButtonGeneral(buttonId);
     }
 
     public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             buttonClickedGeneral(actionEvent, notYourTurnLabel);
         }
 
 
-
     }
 
 
-    public void refreshScreen(){
+    public void refreshScreen() {
         Platform.runLater(() -> {
-            refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
+            try {
+                refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
 
     }
 
-    public void loadImages(){
+    public void loadImages() {
         setImages(new ArrayList<>());
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\after_effects_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\android_studio.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\apple_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\chrome_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\lightroom_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\photoshop_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\android_studio.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\apple_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\chrome_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\lightroom_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\photoshop_logo.PNG");
 
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\edge_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\firefox_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\react-native_logo.JPG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\dell_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\edge_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\firefox_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\react-native_logo.JPG");
+        getImages().add(path + "\\DS-Client\\images-set1\\dell_logo.JPG");
 
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\illustrator_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\flash_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\in_design_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\webstorm_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\bridge_logo.PNG");
-        getImages().add("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\images-set1\\premiere_pro_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\illustrator_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\flash_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\in_design_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\webstorm_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\bridge_logo.PNG");
+        getImages().add(path + "\\DS-Client\\images-set1\\premiere_pro_logo.PNG");
     }
 
-    public void addAllButtonsToList(){
+    public void addAllButtonsToList() {
         setButtons(new ArrayList<>());
         getButtons().add(button1);
         getButtons().add(button2);
@@ -207,13 +212,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
     }
 
 
-
-
-
-
-
-
-    public void registerCallback(){
+    public void registerCallback() {
         try {
             setCallbackObj(new CallbackClientImpl(this));
 
@@ -225,9 +224,9 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
 
 
     public void goBack(ActionEvent actionEvent) throws IOException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             goBackGeneral(actionEvent);
         }
 

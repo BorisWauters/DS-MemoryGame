@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 public interface AppServerInterface extends Remote {
 
-    void registerForCallback( int controllerId,
-            CallbackClientInterface callbackClientObject, int gameId
+    void registerForCallback(int controllerId,
+                             CallbackClientInterface callbackClientObject, int gameId
     ) throws RemoteException;
 
     void removeCallback(int controllerId) throws RemoteException;
 
-    String setupMessage(String username, String password)throws RemoteException;
+    String setupMessage(String username, String password) throws RemoteException;
 
-    boolean checkUsername(String username)throws RemoteException;
+    boolean checkUsername(String username) throws RemoteException;
 
-    void registerUser(String username, String password)throws RemoteException;
+    void registerUser(String username, String password) throws RemoteException;
 
     String acquireSessionId(String username) throws RemoteException;
 
@@ -31,7 +31,7 @@ public interface AppServerInterface extends Remote {
 
     void requestJoin(int gameId, String username) throws RemoteException;
 
-    boolean checkTurn(int gameId, String username) throws  RemoteException;
+    boolean checkTurn(int gameId, String username) throws RemoteException;
 
     ArrayList<String> requestGameConfig(int gameId) throws RemoteException;
 
@@ -39,7 +39,7 @@ public interface AppServerInterface extends Remote {
 
     ArrayList<String> requestGameWinner(int gameId) throws RemoteException;
 
-    void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws  RemoteException;
+    void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws RemoteException;
 
     boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException;
 }

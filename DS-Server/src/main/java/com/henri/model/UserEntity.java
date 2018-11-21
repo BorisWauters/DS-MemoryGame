@@ -9,7 +9,7 @@ public class UserEntity {
     private int userId, score;
     private String username;
     private String password;
-    private SessionidentifierEntity sessionidentifierEntity;
+    private SessionIdentifierEntity sessionidentifierEntity;
 
     @Id
     @Column(name = "user_id")
@@ -49,11 +49,11 @@ public class UserEntity {
 
     @OneToOne//(cascade = CascadeType.ALL)
     @JoinColumn(name = "session_identifier_session_identifier_Id")
-    public SessionidentifierEntity getSessionIdentifierEntity() {
+    public SessionIdentifierEntity getSessionIdentifierEntity() {
         return sessionidentifierEntity;
     }
 
-    public void setSessionIdentifierEntity(SessionidentifierEntity s) {
+    public void setSessionIdentifierEntity(SessionIdentifierEntity s) {
         sessionidentifierEntity = s;
     }
 

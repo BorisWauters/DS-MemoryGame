@@ -5,15 +5,12 @@ import com.henri.dao.GameRepository;
 import com.henri.dao.SessionIdentifierRepository;
 import com.henri.dao.UserEntityRepository;
 import com.henri.model.GameEntity;
-import com.henri.model.SessionidentifierEntity;
+import com.henri.model.SessionIdentifierEntity;
 import com.henri.model.UserEntity;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.time.Instant;
 import java.util.*;
 
 @Component("ServerImpl")
@@ -98,7 +95,7 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
         //generate id
         String sessionId = idGenerator.generateId(60);
         //create new session object
-        SessionidentifierEntity s = new SessionidentifierEntity();
+        SessionIdentifierEntity s = new SessionIdentifierEntity();
         //set identifier to object
         s.setSessionIdentifier(sessionId);
         s.setCancellationTime((System.currentTimeMillis()));
@@ -267,7 +264,7 @@ public class ServerImpl extends UnicastRemoteObject implements InterfaceServer {
 
     @Override
     public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException{
-        SessionidentifierEntity sessionidentifierEntity = sessionIdentifierRepository.findSessionIdentifierById(sessionId);
+        SessionIdentifierEntity sessionidentifierEntity = sessionIdentifierRepository.findSessionIdentifierById(sessionId);
         long cancellationTime = sessionidentifierEntity.getCancellationTime();
         long currentTime = System.currentTimeMillis();
         if (sessionidentifierEntity.getSessionIdentifier().equals(sessionIdentifier)) {

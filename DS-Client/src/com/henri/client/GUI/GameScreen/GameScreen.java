@@ -52,13 +52,13 @@ public class GameScreen extends SendBack {
 
     public void removeCallbackGeneral(Stage stage, int controllerId) {
 
-            try {
-                MainClient.impl.removeCallback(controllerId);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            Platform.exit();
-            System.exit(0);
+        try {
+            MainClient.impl.removeCallback(controllerId);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        Platform.exit();
+        System.exit(0);
 
     }
 
@@ -133,7 +133,7 @@ public class GameScreen extends SendBack {
                 pressedButton.setDisable(true);
                 pressedButton = null;
 
-                if (cardsTurnedGuessedRightInTotal == gamePositions.size()/2) {
+                if (cardsTurnedGuessedRightInTotal == gamePositions.size() / 2) {
                     updateGamePositions();
                     MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
                     //MainClient.impl.requestGameWinner(gameId);
@@ -203,21 +203,24 @@ public class GameScreen extends SendBack {
         }
     }
 
-    public void refreshScreenGeneral(Label notYourTurnLabel, int gameSize) {
+    public void refreshScreenGeneral(Label notYourTurnLabel, int gameSize) throws InterruptedException {
         pressedButton = null;
         cardsTurnedGuessedRightInTotal = 0;
         correctGuesses.clear();
         System.out.println("refreshing screen..");
+        notYourTurnLabel.setText("");
         for (Button b : buttons) {
             b.setStyle(null);
         }
         requestGameConfigGeneral();
 
+        TimeUnit.MILLISECONDS.sleep(1000);
+
         updateGameFieldGeneral();
 
         checkTurnGeneral(notYourTurnLabel);
 
-        if (cardsTurnedGuessedRightInTotal == gameSize/2) {
+        if (cardsTurnedGuessedRightInTotal == gameSize / 2) {
             setWinner(notYourTurnLabel);
         }
         System.out.println("screen refreshed");
@@ -305,26 +308,26 @@ public class GameScreen extends SendBack {
 
     }
 
-    public void setWinner(Label notYourTurnLabel){
+    public void setWinner(Label notYourTurnLabel) {
         ArrayList<String> winners = null;
         try {
             winners = MainClient.impl.requestGameWinner(getGameId());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        for(Button b : getButtons()){
+        for (Button b : getButtons()) {
             b.setDisable(true);
         }
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < winners.size(); i++){
+        for (int i = 0; i < winners.size(); i++) {
             sb.append(winners.get(i));
-            if(i < winners.size() - 1){
+            if (i < winners.size() - 1) {
                 sb.append(", ");
             }
         }
-        if(winners.size() == 1){
+        if (winners.size() == 1) {
             notYourTurnLabel.setText("Game Over! Winner is " + sb.toString());
-        }else{
+        } else {
             notYourTurnLabel.setText("Game over! Winners are " + sb.toString());
         }
     }

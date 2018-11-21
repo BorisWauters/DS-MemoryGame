@@ -1,12 +1,11 @@
 package com.henri.model;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "session_identifier", schema = "ds")
-public class SessionidentifierEntity {
+public class SessionIdentifierEntity {
     private int sessionIdentifierId;
     private String sessionIdentifier;
     private Long cancellationTime = Long.valueOf(0);
@@ -44,7 +43,7 @@ public class SessionidentifierEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SessionidentifierEntity that = (SessionidentifierEntity) o;
+        SessionIdentifierEntity that = (SessionIdentifierEntity) o;
         return sessionIdentifierId == that.sessionIdentifierId &&
                 Objects.equals(sessionIdentifier, that.sessionIdentifier);
     }

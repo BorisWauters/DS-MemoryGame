@@ -18,8 +18,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.henri.dao")
-//@Configuration
-//@ComponentScan(basePackages = {"com.henri.dao", "com.henri.model","com.henri.server"})
+@Configuration
+@ComponentScan(basePackages = {"com.henri.dao", "com.henri.model","com.henri.server"})
 public class MainDB implements CommandLineRunner {
 
 
