@@ -5,7 +5,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController">
+<AnchorPane fx:id="ap" prefHeight="400.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController">
     <children>
         <ToolBar prefHeight="27.0" prefWidth="600.0" styleClass="header-section" stylesheets="@../Layout.css">
             <items>

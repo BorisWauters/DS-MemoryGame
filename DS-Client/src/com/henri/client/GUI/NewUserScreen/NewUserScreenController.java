@@ -1,9 +1,11 @@
 package com.henri.client.GUI.NewUserScreen;
 
 import com.henri.client.GUI.MainClient;
+import com.henri.client.GUI.SendBack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,15 +14,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ResourceBundle;
 
 
-public class NewUserScreenController {
+public class NewUserScreenController extends SendBack implements Initializable {
 
     private Scene mScene;
 
@@ -42,6 +47,14 @@ public class NewUserScreenController {
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private AnchorPane ap;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+        onClose(ap, MainClient.clientId);
+    }
 
     public void register(ActionEvent actionEvent) throws NoSuchAlgorithmException, IOException {
         String usernameInput = username.getText();

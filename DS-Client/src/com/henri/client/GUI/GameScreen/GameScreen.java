@@ -52,7 +52,11 @@ public class GameScreen extends SendBack {
 
     private CallbackClientInterface callbackObj;
 
-    public void removeCallbackGeneral(Stage stage, int controllerId) {
+    /**
+     * Function which removes the callback from the App Server.
+     * @param controllerId The Id of the controller which would like to remove its callback from the App Server
+     * */
+    public void removeCallbackGeneral(int controllerId) {
 
         try {
             MainClient.impl.removeCallback(controllerId);
@@ -64,6 +68,10 @@ public class GameScreen extends SendBack {
 
     }
 
+    /**
+     * Function which updates a specific button by the given button Id.
+     * @param buttonId The identifier of the button which should be updated
+     * */
     public void updateButtonGeneral(int buttonId) {
         for (Button b : buttons) {
             if (Integer.parseInt(b.getId()) == buttonId) {
@@ -81,7 +89,14 @@ public class GameScreen extends SendBack {
         }
     }
 
-    public void buttonClickedGeneral(ActionEvent actionEvent, Label notYourTurnLabel) throws InterruptedException, RemoteException {
+    /**
+     * Function which acts when a card is clicked. It disables the clicked button, sees if it matches the previous clicked card and updates the other viewers.
+     * @param actionEvent The button click by the user
+     * @param notYourTurnLabel Label which displays information on the user interface
+     * @throws RemoteException
+     * @see RemoteException
+     * */
+    public void buttonClickedGeneral(ActionEvent actionEvent, Label notYourTurnLabel) throws  RemoteException {
         Button b = (Button) actionEvent.getSource();
         int buttonId1 = Integer.parseInt(b.getId());
         String fileLocation = buttonToFileMapping.get(buttonId1);
@@ -160,6 +175,9 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which updates the entire game field.
+     * */
     public void updateGameFieldGeneral() {
         for (int i = 0; i < getGamePositions().size() - 1; i++) {
             int buttonNumber = Integer.parseInt(getGamePositions().get(i)) - 1;
@@ -193,6 +211,9 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which updates the state of a card. True when it was correctly guessed, false if not.
+     * */
     public void updateGamePositions() {
         for (int i = 0; i < gamePositions.size(); i++) {
 
@@ -205,6 +226,13 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which refreshes the screen.
+     * @param notYourTurnLabel Label which displays information in the user interface
+     * @param gameSize Size of the game
+     * @throws InterruptedException
+     * @see InterruptedException
+     * */
     public void refreshScreenGeneral(Label notYourTurnLabel, int gameSize) throws InterruptedException {
         pressedButton = null;
         cardsTurnedGuessedRightInTotal = 0;
@@ -228,6 +256,9 @@ public class GameScreen extends SendBack {
         System.out.println("screen refreshed");
     }
 
+    /**
+     * Function which lets a player try to join the game.
+     * */
     public void tryJoinGeneral() {
         if (join) {
             try {
@@ -241,6 +272,9 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which requests the current gme configuration and updates class variables.
+     * */
     public void requestGameConfigGeneral() {
         try {
             ArrayList<String> gameConfig = MainClient.impl.requestGameConfig(gameId);
@@ -263,6 +297,10 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which checks whether it's the users turn.
+     * @param notYourTurnLabel Label which displays information on the user interface
+     * */
     public void checkTurnGeneral(Label notYourTurnLabel) {
         try {
             myTurn = MainClient.impl.checkTurn(gameId, MainClient.username);
@@ -281,6 +319,9 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Functions which maps each button to an image in a HashMap. This way we can keep track of which button is assigned which image.
+     * */
     public void mapButtonsToImagesGeneral() {
         int j = 0;
         for (int i = 0; i < gamePositions.size() - 1; i++) {
@@ -297,6 +338,10 @@ public class GameScreen extends SendBack {
         }
     }
 
+    /**
+     * Function which lets users go back to the game dashboard.
+     * @param actionEvent The button clicked by the user
+     * */
     public void goBackGeneral(ActionEvent actionEvent) throws IOException {
 
         FXMLLoader gameDashboardScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));
@@ -310,6 +355,10 @@ public class GameScreen extends SendBack {
 
     }
 
+    /**
+     * Functions which sets the game winner(s) visible on a label in the UI.
+     * @param notYourTurnLabel Label which displays information in the UI
+     * */
     public void setWinner(Label notYourTurnLabel) {
         ArrayList<String> winners = null;
         try {
@@ -333,9 +382,9 @@ public class GameScreen extends SendBack {
             notYourTurnLabel.setText("Game over! Winners are " + sb.toString());
         }
     }
+
+
     //GETTERS AND SETTERS
-
-
     public int getControllerId() {
         return controllerId;
     }

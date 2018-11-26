@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-public class GameScreen4X6Controller  extends GameScreen implements Initializable {
+public class GameScreen4X6Controller extends GameScreen implements Initializable {
 
     private String path;
 
@@ -103,11 +103,12 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
             //Set new on close handler to remove callback from app server
             Stage stage = (Stage) ap.getScene().getWindow();
             stage.setOnCloseRequest(event -> {
-            removeCallbackGeneral(stage, getControllerId());
-                });
+                removeCallbackGeneral(getControllerId());
+                onClose(ap, MainClient.clientId);
+            });
 
             //Check if viewOnly
-            if(isViewOnly()){
+            if (isViewOnly()) {
                 notYourTurnLabel.setText("You are in view only mode!");
             }
 
@@ -117,25 +118,22 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
     }
 
 
-
-
     public void updateButton(int buttonId) {
         updateButtonGeneral(buttonId);
     }
 
     public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             buttonClickedGeneral(actionEvent, notYourTurnLabel);
         }
-
 
 
     }
 
 
-    public void refreshScreen(){
+    public void refreshScreen() {
         Platform.runLater(() -> {
             try {
                 refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
@@ -146,7 +144,7 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
     }
 
-    public void loadImages(){
+    public void loadImages() {
         setImages(new ArrayList<>());
         getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
         getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
@@ -163,7 +161,7 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
         getImages().add(path + "\\DS-Client\\images-set1\\dell_logo.JPG");
     }
 
-    public void addAllButtonsToList(){
+    public void addAllButtonsToList() {
         setButtons(new ArrayList<>());
         getButtons().add(button1);
         getButtons().add(button2);
@@ -193,13 +191,7 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
     }
 
 
-
-
-
-
-
-
-    public void registerCallback(){
+    public void registerCallback() {
         try {
             setCallbackObj(new CallbackClientImpl(this));
 
@@ -211,9 +203,9 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
 
 
     public void goBack(ActionEvent actionEvent) throws IOException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             goBackGeneral(actionEvent);
         }
 
@@ -225,7 +217,6 @@ public class GameScreen4X6Controller  extends GameScreen implements Initializabl
         }
         return "Second - theme";
     }
-
 
 
 }

@@ -12,10 +12,10 @@ public class ServerMain {
 
     public void startServer(UserEntityRepository userEntityRepository, SessionIdentifierRepository sessionIdentifierRepository, GameRepository gameRepository) {
         try {
-            //create on ort 1099
-            Registry registry = LocateRegistry.createRegistry(1102);
+            //create on port 1114
+            Registry registry = LocateRegistry.createRegistry(1114);
 
-            //create a new service named CounterService
+            //create a new service
 
             registry.rebind("ServerImplService", new ServerImpl(userEntityRepository, sessionIdentifierRepository, gameRepository));
 

@@ -9,14 +9,19 @@ import java.util.*;
 
 import static com.henri.RMI.Client.ClientMain.impl;
 
+/**
+ * Class which is the implementation if the @AppServerInterface class and performs functions invoked by the client.
+ */
 public class AppServerImpl extends UnicastRemoteObject implements AppServerInterface {
 
     private Set<String> userSet = new HashSet<>();
     private Map<Integer, ArrayList<Object>> clientList;
 
+
     public AppServerImpl() throws RemoteException {
         clientList = new HashMap<>();
     }
+
 
     @Override
     public synchronized void registerForCallback(int controllerId,
@@ -29,6 +34,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
         clientList.put(controllerId, values);
     }
 
+
     @Override
     public void removeCallback(int controllerId) throws RemoteException {
         int keyToRemove = -1;
@@ -37,6 +43,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
         }
         clientList.remove(keyToRemove);
     }
+
 
     @Override
     public String setupMessage(String username, String password) throws RemoteException {
@@ -49,20 +56,24 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
 
     }
 
+
     @Override
     public boolean checkUsername(String username) throws RemoteException {
         return impl.checkUsername(username);
     }
+
 
     @Override
     public void registerUser(String username, String password) throws RemoteException {
         impl.registerUser(username, password);
     }
 
+
     @Override
     public String acquireSessionId(String username) throws RemoteException {
         return impl.acquireSessionId(username);
     }
+
 
     @Override
     public void createGame(String gameConfig, String username) throws RemoteException {
@@ -122,6 +133,7 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
 
     }
 
+
     @Override
     public void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score, int controllerType) throws RemoteException {
         StringBuilder sb = new StringBuilder();
@@ -145,35 +157,42 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
 
     }
 
+
     @Override
     public ArrayList<String> requestGames(String username) throws RemoteException {
         return impl.requestGames(username);
     }
+
 
     @Override
     public ArrayList<String> requestAllGames(String username) throws RemoteException {
         return impl.requestAllGames(username);
     }
 
+
     @Override
     public void requestJoin(int gameId, String username) throws RemoteException {
         impl.requestJoin(gameId, username);
     }
+
 
     @Override
     public boolean checkTurn(int gameId, String username) throws RemoteException {
         return impl.checkTurn(gameId, username);
     }
 
+
     @Override
     public ArrayList<String> requestGameConfig(int gameId) throws RemoteException {
         return impl.requestGameConfig(gameId);
     }
 
+
     @Override
     public ArrayList<String> requestGameWinner(int gameId) throws RemoteException {
         return impl.requestGameWinner(gameId);
     }
+
 
     @Override
     public void updateCardFlip(int buttonId, int gameId, int controllerId, int controllerType) throws RemoteException {
@@ -186,13 +205,15 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
         }
     }
 
+
     @Override
     public boolean checkSessionIdentifier(int sessionId, String sessionIdentifier) throws RemoteException {
         return impl.checkSessionIdentifier(sessionId, sessionIdentifier);
     }
 
+
     @Override
-    public ArrayList<String> requestTopPlayers() throws RemoteException{
+    public ArrayList<String> requestTopPlayers() throws RemoteException {
         return impl.requestTopPlayers();
     }
 }

@@ -3,12 +3,18 @@ package com.henri.RMI.Server;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * Class which initializes the registry creation and binding
+ * */
 public class ServerMain {
 
-    public void startServer() {
+    /**
+     * Function which creates the required registries and binds them
+     * */
+    public void startServer(int port) {
         try {
-            //create on ort 1099
-            Registry registry = LocateRegistry.createRegistry(1099);
+            //create on given port
+            Registry registry = LocateRegistry.createRegistry(port);
 
             //create a new service named CounterService
 

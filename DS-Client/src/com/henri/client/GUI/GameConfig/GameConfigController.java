@@ -5,6 +5,7 @@ import com.henri.client.GUI.SendBack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,11 +13,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class GameConfigController extends SendBack {
+/**
+ * Class which enables users to configure a new game.
+ * */
+public class GameConfigController extends SendBack implements Initializable {
 
     private int numberOfPlayers;
     private int gameSize; // 1 = 4X4; 2 = 6X6; 3 = 4X6
@@ -61,6 +68,18 @@ public class GameConfigController extends SendBack {
     @FXML
     private TextField gameName;
 
+    @FXML
+    private AnchorPane ap;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+        onClose(ap, MainClient.clientId);
+    }
+
+    /**
+     * Function which creates the new game.
+     * @param actionEvent The clicked button which initializes this function
+     * */
     public void newGame(ActionEvent actionEvent) throws IOException {
 
         if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
@@ -108,8 +127,10 @@ public class GameConfigController extends SendBack {
                 sb.append(String.valueOf(gameTheme));
                 sb.append(",");
                 sb.append(gameName.getText());
+                //create game on app server
                 MainClient.impl.createGame(sb.toString(),MainClient.username);
 
+                //load game dashboard
                 FXMLLoader gameDashboardLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));
                 Parent gameDashboardPane =  gameDashboardLoader.load();
                 Scene gameDashboardScene = new Scene( gameDashboardPane);

@@ -8,15 +8,19 @@ import com.henri.client.GUI.SendBack;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class JoinOrViewController extends SendBack {
+public class JoinOrViewController extends SendBack implements Initializable {
 
     private int gameSize;
     private int gameId;
@@ -30,6 +34,14 @@ public class JoinOrViewController extends SendBack {
 
     @FXML
     private Button viewButton;
+
+    @FXML
+    private AnchorPane ap;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources){
+        onClose(ap, MainClient.clientId);
+    }
 
     public void join(ActionEvent actionEvent) throws IOException {
         if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){

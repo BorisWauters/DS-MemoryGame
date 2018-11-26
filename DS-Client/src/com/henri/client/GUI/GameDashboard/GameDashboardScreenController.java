@@ -20,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 
@@ -32,6 +33,9 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 
+/**
+ * Class which implements functions related to the game dashboard user interface.
+ * */
 public class GameDashboardScreenController extends SendBack implements Initializable {
 
     private Scene mScene;
@@ -68,14 +72,30 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     @FXML
     private TableColumn<tableItem, String> usernameColumn;
 
+    @FXML
+    private AnchorPane ap;
+
+    /**
+     * @inheritDoc
+     * Function which, on initialization of the user interface, requests the games and the top players.
+     * */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //get current games for the user
         requestGames();
         requestTopPlayers();
         usernameLabel.setText(" Welcome " + MainClient.username + " ");
+        onClose(ap, MainClient.clientId);
     }
 
+    /**
+     * Function which creates entries for the ListView
+     * @param playerGamesList List with the information about the game, such as id, name, active players
+     * @param items Observable list in which the entries get inserted
+     * @param gameIdentifiers New games id's get added to the general list of game identifiers
+     * @param numberOfPLayers List with each current completion of the number of user of each game
+     * @param gameSizesJoinedGames List with all game sizes of joined games
+     * */
     public void createObservable(ArrayList<String> playerGamesList, ObservableList<String> items, ArrayList<Integer> gameIdentifiers, ArrayList<Integer> numberOfPLayers, ArrayList<Integer> gameSizesJoinedGames) {
         for (int i = 0; i < playerGamesList.size(); i++) {
             StringBuffer sb = new StringBuffer();
@@ -114,6 +134,12 @@ public class GameDashboardScreenController extends SendBack implements Initializ
     }
 
 
+    /**
+     * Function which send the user to the user interface where it can create a new game
+     * @param actionEvent The button which is clicked
+     * @throws IOException
+     * @see IOException
+     * */
     public void newGame(ActionEvent actionEvent) throws IOException {
         if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
@@ -128,6 +154,12 @@ public class GameDashboardScreenController extends SendBack implements Initializ
 
     }
 
+    /**
+     * Function which, when a user clicks on the ListView containing his own games, send the user to the game screen.
+     * @param mouseEvent Mouse click by the user
+     * @throws IOException
+     * @see IOException
+     * */
     public void onMouseClickOwnGame(MouseEvent mouseEvent) throws IOException {
 
         if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
@@ -144,6 +176,18 @@ public class GameDashboardScreenController extends SendBack implements Initializ
 
     }
 
+    //TODO: when any game is accessed, check whether an appserver has been assigned to the game (create new data field in database).
+    //HOW TO: check database field of the game (save the port number of the appserver?). If game resides in an app server, return port and let user switch appservers.
+    // If the game does not yet reside in an app server (e.g. new game which was created),
+    // check if appserver on which the user currently is, is full (max 20 active games, save them in a Set). If full, switch to appserver which is not full.
+
+    //This could be done automatically, or by forcing the user to log out and change server (maybe show all active servers on homescreen?)
+    /**
+     * Function which, when a user clicks on a game of which he is not part, send the user to the join or view screen.
+     * @param mouseEvent mouse click bu the user
+     * @throws IOException
+     * @see IOException
+     * */
     public void onMouseClickAllGames(MouseEvent mouseEvent) throws IOException {
         //based on maxUserSize and current userSize, redirect to view only screen, or view or join inter-screen
         // If game is full, set view only!
@@ -181,6 +225,15 @@ public class GameDashboardScreenController extends SendBack implements Initializ
 
     }
 
+    /**
+     * Function which send the user to the game screen given several input parameters.
+     * @param mouseEvent Click by the user, required to retrieve the current stage
+     * @param gameSize The size of the game, required to send the user to the correct user interface
+     * @param viewOnly True when the user cannot join, false when he can
+     * @param gameId The Id of the game the user would like to join
+     * @throws IOException
+     * @see IOException
+     * */
     public void sendToGameScreen(MouseEvent mouseEvent, int gameSize, boolean viewOnly, int gameId) throws IOException {
         if (gameSize == 1) {
             System.out.println("Game Size: 1");
@@ -230,6 +283,10 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         }
     }
 
+    /**
+     * Function which lets the user to go back to the previous user interface.
+     * @param actionEvent Button click by the user
+     * */
     public void goBack(ActionEvent actionEvent) throws IOException {
         FXMLLoader homeScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/HomeScreen/HomeScreen.fxml"));
         Parent homeScreenPane = homeScreenLoader.load();
@@ -239,6 +296,9 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         primaryStage.setScene(homeScreenScene);
     }
 
+    /**
+     * Function which requests the games of which the user is part of.
+     * */
     public void requestGames() {
         try {
             ArrayList<String> playerGamesList = MainClient.impl.requestGames(MainClient.username);
@@ -269,10 +329,17 @@ public class GameDashboardScreenController extends SendBack implements Initializ
         }
     }
 
+    /**
+     * Function which refreshes the screen.
+     * @param actionEvent Button click by the user
+     * */
     public void refreshScreen(ActionEvent actionEvent) {
         requestGames();
     }
 
+    /**
+     * Function which requests the top players in the application.
+     * */
     public void requestTopPlayers() {
         //scoreColumn
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));

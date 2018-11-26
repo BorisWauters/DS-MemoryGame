@@ -6,10 +6,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 public class SendBack {
 
@@ -29,5 +31,16 @@ public class SendBack {
 
         Stage primaryStage = (Stage)((Node)mouseEvent.getSource()).getScene().getWindow();
         primaryStage.setScene(gameDashboardScene);
+    }
+
+    public void onClose(AnchorPane ap, int clientId){
+        Stage stage = (Stage) ap.getScene().getWindow();
+        stage.setOnCloseRequest(event -> {
+            try {
+                MainClient.implDispatch.remove(clientId);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

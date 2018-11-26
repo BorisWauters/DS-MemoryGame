@@ -9,7 +9,7 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameDashboard.GameDashboardScreenController">
+<AnchorPane fx:id="ap" prefHeight="600.0" prefWidth="830.0" styleClass="root" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.GameDashboard.GameDashboardScreenController">
     <children>
         <ToolBar prefHeight="63.0" prefWidth="800.0" styleClass="header-section" stylesheets="@../Layout.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <items>

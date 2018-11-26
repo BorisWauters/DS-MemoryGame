@@ -99,7 +99,8 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
             //Set new on close handler to remove callback from app server
             Stage stage = (Stage) ap.getScene().getWindow();
             stage.setOnCloseRequest(event -> {
-                removeCallbackGeneral(stage, getControllerId());
+                removeCallbackGeneral(getControllerId());
+                onClose(ap, MainClient.clientId);
             });
 
             //Check if viewOnly
