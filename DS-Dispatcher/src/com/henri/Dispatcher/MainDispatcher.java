@@ -3,9 +3,12 @@ package com.henri.Dispatcher;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * Class which starts the dispatcher
+ * */
 public class MainDispatcher {
 
-    public static void main(String... args){
+    public static void main(String... args) {
         try {
             //create on port 1103
             Registry registry = LocateRegistry.createRegistry(1103);

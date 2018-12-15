@@ -2,6 +2,7 @@ package com.henri.client.GUI.GameConfig;
 
 import com.henri.client.GUI.MainClient;
 import com.henri.client.GUI.SendBack;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,12 +19,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
 /**
  * Class which enables users to configure a new game.
- * */
-public class GameConfigController extends SendBack implements Initializable {
+ */
+public class GameConfigController extends SendBack {
 
     private int numberOfPlayers;
     private int gameSize; // 1 = 4X4; 2 = 6X6; 3 = 4X6
@@ -54,7 +56,7 @@ public class GameConfigController extends SendBack implements Initializable {
     private Label sizeLabel;
 
     @FXML
-    private  CheckBox softwareTheme;
+    private CheckBox softwareTheme;
 
     @FXML
     private CheckBox secondTheme;
@@ -71,53 +73,52 @@ public class GameConfigController extends SendBack implements Initializable {
     @FXML
     private AnchorPane ap;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        onClose(ap, MainClient.clientId);
-    }
 
     /**
      * Function which creates the new game.
+     *
      * @param actionEvent The clicked button which initializes this function
-     * */
+     */
     public void newGame(ActionEvent actionEvent) throws IOException {
 
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }
-        else{
+        } else {
             //Checking if only one checkbox per section has been marked
 
             boolean inputCorrect = true;
             //TODO ook controleren dater minstens een gechecked is
-            if((twoPlayers.isSelected() && threePlayers.isSelected()) || (threePlayers.isSelected() && fourPlayers.isSelected()) || (twoPlayers.isSelected() && fourPlayers.isSelected())){
+            if ((twoPlayers.isSelected() && threePlayers.isSelected()) || (threePlayers.isSelected() && fourPlayers.isSelected()) || (twoPlayers.isSelected() && fourPlayers.isSelected())) {
                 playerLabel.setText(" Only select one box! ");
                 playerLabel.setVisible(true);
                 inputCorrect = false;
-            }if((fourByFour.isSelected() && sixBySix.isSelected()) || (sixBySix.isSelected() && fourBySix.isSelected()) || (fourByFour.isSelected() && fourBySix.isSelected())){
+            }
+            if ((fourByFour.isSelected() && sixBySix.isSelected()) || (sixBySix.isSelected() && fourBySix.isSelected()) || (fourByFour.isSelected() && fourBySix.isSelected())) {
                 sizeLabel.setText(" Only select one box! ");
                 sizeLabel.setVisible(true);
                 inputCorrect = false;
-            }if((softwareTheme.isSelected() && secondTheme.isSelected())){
+            }
+            if ((softwareTheme.isSelected() && secondTheme.isSelected())) {
                 themeLabel.setText(" Only select one box! ");
                 themeLabel.setVisible(true);
                 inputCorrect = false;
-            }if(gameName.getText().isEmpty()){
+            }
+            if (gameName.getText().isEmpty()) {
                 gameLabel.setText(" Enter a game name! ");
                 inputCorrect = false;
             }
-            if(inputCorrect){
+            if (inputCorrect) {
                 //initiate game on app server
-                if(twoPlayers.isSelected()) numberOfPlayers = 2;
-                else if(threePlayers.isSelected()) numberOfPlayers = 3;
-                else if(fourPlayers.isSelected()) numberOfPlayers = 4;
+                if (twoPlayers.isSelected()) numberOfPlayers = 2;
+                else if (threePlayers.isSelected()) numberOfPlayers = 3;
+                else if (fourPlayers.isSelected()) numberOfPlayers = 4;
 
-                if(fourByFour.isSelected()) gameSize = 1;
-                else if(sixBySix.isSelected()) gameSize = 2;
-                else if(fourBySix.isSelected()) gameSize = 3;
+                if (fourByFour.isSelected()) gameSize = 1;
+                else if (sixBySix.isSelected()) gameSize = 2;
+                else if (fourBySix.isSelected()) gameSize = 3;
 
-                if(softwareTheme.isSelected()) gameTheme = 1;
-                else if(secondTheme.isSelected()) gameTheme = 2;
+                if (softwareTheme.isSelected()) gameTheme = 1;
+                else if (secondTheme.isSelected()) gameTheme = 2;
 
                 StringBuffer sb = new StringBuffer();
                 sb.append(String.valueOf(numberOfPlayers));
@@ -128,22 +129,29 @@ public class GameConfigController extends SendBack implements Initializable {
                 sb.append(",");
                 sb.append(gameName.getText());
                 //create game on app server
-                MainClient.impl.createGame(sb.toString(),MainClient.username);
+                MainClient.impl.createGame(sb.toString(), MainClient.username);
 
                 //load game dashboard
                 FXMLLoader gameDashboardLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));
-                Parent gameDashboardPane =  gameDashboardLoader.load();
-                Scene gameDashboardScene = new Scene( gameDashboardPane);
+                Parent gameDashboardPane = gameDashboardLoader.load();
+                Scene gameDashboardScene = new Scene(gameDashboardPane);
 
-                Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+                Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                primaryStage.setOnCloseRequest(event -> {
+                    try {
+                        MainClient.implDispatch.remove(MainClient.clientId);
+                        Platform.exit();
+                        System.exit(0);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                });
                 primaryStage.setScene(gameDashboardScene);
             }
         }
 
 
     }
-
-
 
 
 }

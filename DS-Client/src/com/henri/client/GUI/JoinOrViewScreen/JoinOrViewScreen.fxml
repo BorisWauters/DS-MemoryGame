@@ -5,19 +5,24 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="ap" prefHeight="400.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController">
+<AnchorPane fx:id="ap" prefHeight="400.0" prefWidth="600.0" styleClass="content-section" stylesheets="@../Layout.css"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.henri.client.GUI.JoinOrViewScreen.JoinOrViewController">
     <children>
         <ToolBar prefHeight="27.0" prefWidth="600.0" styleClass="header-section" stylesheets="@../Layout.css">
             <items>
-                <Label text="Memory Game" />
+                <Label text="Memory Game"/>
             </items>
         </ToolBar>
-      <AnchorPane layoutY="65.0" prefHeight="336.0" prefWidth="600.0">
-         <children>
-              <Button fx:id="backButton" layoutX="27.0" layoutY="35.0" mnemonicParsing="false" onAction="#goBack" text="Back" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="35.0" />
-            <Button fx:id="joinButton" layoutX="128.0" layoutY="153.0" mnemonicParsing="false" onAction="#join" text="Join Game" />
-            <Button fx:id="viewButton" layoutX="374.0" layoutY="153.0" mnemonicParsing="false" onAction="#view" text="View Game" />
-         </children>
-      </AnchorPane>
+        <AnchorPane layoutY="65.0" prefHeight="336.0" prefWidth="600.0">
+            <children>
+                <Button fx:id="backButton" layoutX="27.0" layoutY="35.0" mnemonicParsing="false" onAction="#goBack"
+                        text="Back" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="35.0"/>
+                <Button fx:id="joinButton" layoutX="128.0" layoutY="153.0" mnemonicParsing="false" onAction="#join"
+                        text="Join Game"/>
+                <Button fx:id="viewButton" layoutX="374.0" layoutY="153.0" mnemonicParsing="false" onAction="#view"
+                        text="View Game"/>
+            </children>
+        </AnchorPane>
     </children>
 </AnchorPane>

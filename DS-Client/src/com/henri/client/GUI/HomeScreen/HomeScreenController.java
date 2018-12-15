@@ -3,6 +3,7 @@ package com.henri.client.GUI.HomeScreen;
 
 import com.henri.client.GUI.MainClient;
 import com.henri.client.GUI.SendBack;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +18,13 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ResourceBundle;
 
-
-public class HomeScreenController  extends SendBack implements Initializable {
-
+/**
+ * Class which serves as the controller for the homescreen
+ * */
+public class HomeScreenController extends SendBack {
 
 
     @FXML
@@ -33,18 +36,15 @@ public class HomeScreenController  extends SendBack implements Initializable {
     @FXML
     private AnchorPane ap;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        onClose(ap, MainClient.clientId);
-    }
-
+    /**
+     * Function which acts on the button "existing user" and loads the login page
+     *
+     * @param actionEvent The event tied to the button click
+     * */
     public void existingUser(ActionEvent actionEvent) throws IOException {
 
 
-
-
-        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
-
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
 
         //Initialize Login scene
@@ -54,22 +54,30 @@ public class HomeScreenController  extends SendBack implements Initializable {
 
         primaryStage.setScene(loginScene);
         primaryStage.setTitle("Memory Game");
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                MainClient.implDispatch.remove(MainClient.clientId);
+                Platform.exit();
+                System.exit(0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         //primaryStage.getIcons(new Image("com/henri/client/GUI/icon.png"));
         primaryStage.getIcons().add(new Image("com/henri/client/GUI/icon.png"));
 
 
-
-
-
-
-
-
     }
 
+    /**
+     * Function which acts on the button "new user" and loads the registration page
+     *
+     * @param actionEvent The event tied to the button
+     * */
     public void newUser(ActionEvent actionEvent) throws IOException {
 
 
-        Stage primaryStage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+        Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
 
         //Initialize NewUser scene
         FXMLLoader newUserLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/NewUserScreen/NewUserScreen.fxml"));
@@ -80,9 +88,6 @@ public class HomeScreenController  extends SendBack implements Initializable {
 
 
         primaryStage.setTitle("Memory Game");
-
-
-
 
 
     }

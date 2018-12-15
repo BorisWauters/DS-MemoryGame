@@ -1,4 +1,4 @@
-package com.henri.RMI.Server;
+package com.henri.Server;
 
 import com.henri.client.RMI.CallbackClientInterface;
 
@@ -6,6 +6,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * Interface class which lets the client access app server methods
+ * */
 public interface AppServerInterface extends Remote {
 
     /**
@@ -85,7 +88,7 @@ public interface AppServerInterface extends Remote {
      * Function which requests the games in which the given user is active
      *
      * @param username The username of the user
-     * @return ArrayList<String> List with all the games and their information
+     * @return ArrayList List with all the games and their information as strings
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
@@ -95,7 +98,7 @@ public interface AppServerInterface extends Remote {
      * Function which requests all the games in which the given user is not present
      *
      * @param username The username of the user
-     * @return ArrayList<String> List with all the games and their information
+     * @return ArrayList List with all the games and their information as strings
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
@@ -104,29 +107,29 @@ public interface AppServerInterface extends Remote {
     /**
      * Function which requests the join of a game by a given user
      *
-     * @param gameId   The Id og the game the user would like to join
-     * @param username The username of the user
+     * @param gameId   The Ii of the game the user would like to join
+     * @param userId  The user id
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
-    void requestJoin(int gameId, String username) throws RemoteException;
+    void requestJoin(int gameId, int userId) throws RemoteException;
 
     /**
      * Function which checks if the given user is at turn.
      *
      * @param gameId   Id of the game which has to be checked
-     * @param username The username of the user which wants to check if it's his turn
+     * @param userId The username of the user which wants to check if it's his turn
      * @return Boolean which is is true when it's the users turn and false if not
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
-    boolean checkTurn(int gameId, String username) throws RemoteException;
+    boolean checkTurn(int gameId, int userId) throws RemoteException;
 
     /**
      * Function which requests the current game configuration.
      *
      * @param gameId The Id of the game of which the configuration is requested
-     * @return ArrayLIst<String> List with the entire configuration of the game
+     * @return ArrayList List with the entire configuration of the game as strings
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
@@ -136,19 +139,20 @@ public interface AppServerInterface extends Remote {
      * Function which updates a game. It will propagate this update to the Database Server and inform all clients which are currently viewing this game via their registered callbacks.
      *
      * @param gameId         The Id of the game which is to be updated. This is used to find all callbacks which need to be invoked.
-     * @param username       The username of the user which requests the update
+     * @param userId       The username of the user which requests the update
      * @param gamePositions  Current settings of the memory cards
      * @param score          The score the user acquired during his turn
      * @param controllerType Used with the callback, required at the client side to cast to the right controller
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
-    void updateGame(int gameId, String username, ArrayList<String> gamePositions, int score, int controllerType) throws RemoteException;
+    void updateGame(int gameId, int userId, ArrayList<String> gamePositions, int score, int controllerType) throws RemoteException;
 
     /**
      * Function which requests the game winner for a given game.
+     *
      * @param gameId The Id o the given game
-     * @return ArrayLIst<String> List withe the name(s) of the winner(s)
+     * @return ArrayList List withe the name(s) of the winner(s) as strings
      * @throws RemoteException Necessary because of the RMI
      * @see RemoteException
      */
@@ -179,7 +183,48 @@ public interface AppServerInterface extends Remote {
 
     /**
      * Function which requests the overall top players in the application.
-     * @return ArrayList<String> List with the names and scores of the top players
-     * */
+     *
+     * @return ArrayList List with the names and scores of the top players as strings
+     */
     ArrayList<String> requestTopPlayers() throws RemoteException;
+
+    /**
+     * Function which lets a player enter a certain game.
+     *
+     * @param gameId The id of the game
+     * @return Game The game which the user entered for backup purposes
+     * */
+    Game enterGame(int gameId) throws RemoteException;
+
+    /**
+     * Function which checks whether the game is active on the current app server
+     *
+     * @param gameId The id of the game
+     * @return boolean True if the game resides on this app server, false otherwise
+     * */
+    boolean checkGameAvailability(int gameId) throws RemoteException;
+
+    /**
+     * Function which checks if the game is residing on another app server
+     *
+     * @param gameId The id of the game
+     * @return int The port of the app server if the game resides on another app server, -1 otherwise
+     * */
+    int checkGameOnOtherServer(int gameId) throws RemoteException;
+
+    /**
+     * Function which lets a user enter a new game and stores this game on the app server
+     *
+     * @param gameId The id of the game
+     * @return Game The game object for backup purposes
+     * */
+    Game enterNewGame(int gameId) throws RemoteException;
+
+    /**
+     * Function which lets a user leave the game.
+     *
+     * @param gameId The id of the game
+     * */
+    void leaveGame(int gameId) throws RemoteException;
+
 }

@@ -55,24 +55,29 @@ public class GameScreen extends SendBack {
     /**
      * Function which removes the callback from the App Server.
      * @param controllerId The Id of the controller which would like to remove its callback from the App Server
-     * */
+     */
     public void removeCallbackGeneral(int controllerId) {
 
         try {
             MainClient.impl.removeCallback(controllerId);
+            MainClient.implDispatch.remove(MainClient.clientId);
+            MainClient.impl.leaveGame(gameId);
+            Platform.exit();
+            System.exit(0);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        Platform.exit();
-        System.exit(0);
+        //Platform.exit();
+        //System.exit(0);
 
     }
 
     /**
      * Function which updates a specific button by the given button Id.
+     *
      * @param buttonId The identifier of the button which should be updated
-     * */
-    public void updateButtonGeneral(int buttonId) {
+     */
+    public void updateButtonGeneral(int buttonId)  {
         for (Button b : buttons) {
             if (Integer.parseInt(b.getId()) == buttonId) {
                 Platform.runLater(() -> {
@@ -83,7 +88,6 @@ public class GameScreen extends SendBack {
                     imageView.setFitHeight(90);
                     b.setStyle("-fx-background-color: #FFFFFF");
                     b.setGraphic(imageView);
-
                 });
             }
         }
@@ -91,12 +95,13 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which acts when a card is clicked. It disables the clicked button, sees if it matches the previous clicked card and updates the other viewers.
-     * @param actionEvent The button click by the user
+     *
+     * @param actionEvent      The button click by the user
      * @param notYourTurnLabel Label which displays information on the user interface
      * @throws RemoteException
      * @see RemoteException
-     * */
-    public void buttonClickedGeneral(ActionEvent actionEvent, Label notYourTurnLabel) throws  RemoteException {
+     */
+    public void buttonClickedGeneral(ActionEvent actionEvent, Label notYourTurnLabel) throws RemoteException, InterruptedException {
         Button b = (Button) actionEvent.getSource();
         int buttonId1 = Integer.parseInt(b.getId());
         String fileLocation = buttonToFileMapping.get(buttonId1);
@@ -152,8 +157,8 @@ public class GameScreen extends SendBack {
 
                 if (cardsTurnedGuessedRightInTotal == gamePositions.size() / 2) {
                     updateGamePositions();
-                    MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
-                    //MainClient.impl.requestGameWinner(gameId);
+                    MainClient.impl.updateGame(gameId, MainClient.userId, gamePositions, correctGuesses.size() / 2, controllerType);
+                    MainClient.impl.requestGameWinner(gameId);
                     notYourTurnLabel.setText("Game Over!");
                 }
 
@@ -166,8 +171,8 @@ public class GameScreen extends SendBack {
                 }
 
                 updateGamePositions();
-
-                MainClient.impl.updateGame(gameId, MainClient.username, gamePositions, correctGuesses.size() / 2, controllerType);
+                TimeUnit.MILLISECONDS.sleep(250);
+                MainClient.impl.updateGame(gameId, MainClient.userId, gamePositions, correctGuesses.size() / 2, controllerType);
 
             }
 
@@ -177,7 +182,7 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which updates the entire game field.
-     * */
+     */
     public void updateGameFieldGeneral() {
         for (int i = 0; i < getGamePositions().size() - 1; i++) {
             int buttonNumber = Integer.parseInt(getGamePositions().get(i)) - 1;
@@ -213,7 +218,7 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which updates the state of a card. True when it was correctly guessed, false if not.
-     * */
+     */
     public void updateGamePositions() {
         for (int i = 0; i < gamePositions.size(); i++) {
 
@@ -228,11 +233,12 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which refreshes the screen.
+     *
      * @param notYourTurnLabel Label which displays information in the user interface
-     * @param gameSize Size of the game
+     * @param gameSize         Size of the game
      * @throws InterruptedException
      * @see InterruptedException
-     * */
+     */
     public void refreshScreenGeneral(Label notYourTurnLabel, int gameSize) throws InterruptedException {
         pressedButton = null;
         cardsTurnedGuessedRightInTotal = 0;
@@ -258,11 +264,11 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which lets a player try to join the game.
-     * */
+     */
     public void tryJoinGeneral() {
         if (join) {
             try {
-                MainClient.impl.requestJoin(gameId, MainClient.username);
+                MainClient.impl.requestJoin(gameId, MainClient.userId);
 
 
             } catch (RemoteException e) {
@@ -273,8 +279,8 @@ public class GameScreen extends SendBack {
     }
 
     /**
-     * Function which requests the current gme configuration and updates class variables.
-     * */
+     * Function which requests the current game configuration and updates class variables.
+     */
     public void requestGameConfigGeneral() {
         try {
             ArrayList<String> gameConfig = MainClient.impl.requestGameConfig(gameId);
@@ -299,11 +305,12 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which checks whether it's the users turn.
+     *
      * @param notYourTurnLabel Label which displays information on the user interface
-     * */
+     */
     public void checkTurnGeneral(Label notYourTurnLabel) {
         try {
-            myTurn = MainClient.impl.checkTurn(gameId, MainClient.username);
+            myTurn = MainClient.impl.checkTurn(gameId, MainClient.userId);
             if (!myTurn) {
                 //set all buttons on-clickable and set label "it's not your turn"
                 for (Button b : buttons) {
@@ -321,7 +328,7 @@ public class GameScreen extends SendBack {
 
     /**
      * Functions which maps each button to an image in a HashMap. This way we can keep track of which button is assigned which image.
-     * */
+     */
     public void mapButtonsToImagesGeneral() {
         int j = 0;
         for (int i = 0; i < gamePositions.size() - 1; i++) {
@@ -340,8 +347,9 @@ public class GameScreen extends SendBack {
 
     /**
      * Function which lets users go back to the game dashboard.
+     *
      * @param actionEvent The button clicked by the user
-     * */
+     */
     public void goBackGeneral(ActionEvent actionEvent) throws IOException {
 
         FXMLLoader gameDashboardScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/GameDashboard/GameDashboardScreen.fxml"));
@@ -349,16 +357,27 @@ public class GameScreen extends SendBack {
         Scene gameDashboardScreenScene = new Scene(gameDashboardScreenPane);
 
         MainClient.impl.removeCallback(getControllerId());
+        //decrease the amount of active users of the game
+        MainClient.impl.leaveGame(gameId);
 
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                MainClient.implDispatch.remove(MainClient.clientId);
+                //MainClient.impl.leaveGame(gameId);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         primaryStage.setScene(gameDashboardScreenScene);
 
     }
 
     /**
      * Functions which sets the game winner(s) visible on a label in the UI.
+     *
      * @param notYourTurnLabel Label which displays information in the UI
-     * */
+     */
     public void setWinner(Label notYourTurnLabel) {
         ArrayList<String> winners = null;
         try {

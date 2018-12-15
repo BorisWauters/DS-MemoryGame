@@ -18,7 +18,11 @@ import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.*;
 
-public class GameScreen4X4Controller extends GameScreen implements Initializable{
+/**
+ *
+ * Class which serves as the controller for the 4X4 game view
+ * */
+public class GameScreen4X4Controller extends GameScreen implements Initializable {
 
     private String path;
 
@@ -44,7 +48,9 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
     @FXML
     private Button backButton;
 
-
+    /**
+     * Function which initializes the view (load images, try joining the game, requesting game configuration..)
+     * */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Platform.runLater(() -> {
@@ -66,8 +72,6 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
             gameNameLabel.setText(getGameName());
             gameThemeLabel.setText(setGameThemeText(getGameTheme()));
-
-            setClosedFile(new File(path + "\\DS-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
             //setClosedFile(new File("C:\\docs\\KUL\\MASTER\\semester1\\distributed systems\\Lab\\DSProject-Client\\src\\com\\henri\\client\\GUI\\GameScreen4X4\\closed.png"));
 
@@ -100,11 +104,19 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
             Stage stage = (Stage) ap.getScene().getWindow();
             stage.setOnCloseRequest(event -> {
                 removeCallbackGeneral(getControllerId());
-                onClose(ap, MainClient.clientId);
+                try{
+                    MainClient.implDispatch.remove(MainClient.clientId);
+                    MainClient.impl.leaveGame(getGameId());
+                    Platform.exit();
+                    System.exit(0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
             });
 
             //Check if viewOnly
-            if(isViewOnly()){
+            if (isViewOnly()) {
                 notYourTurnLabel.setText("You are in view only mode!");
             }
 
@@ -113,30 +125,37 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
     }
 
-
-
-
+    /**
+     * Function which updates a pressed button
+     * @param buttonId The id of the button
+     * */
     public void updateButton(int buttonId) {
 
         updateButtonGeneral(buttonId);
     }
 
+    /**
+     * Function which acts on a clicked button
+     *
+     * @param actionEvent The event which triggers the function
+     * */
     public void buttonClicked(ActionEvent actionEvent) throws IOException, InterruptedException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             buttonClickedGeneral(actionEvent, notYourTurnLabel);
         }
 
 
-
     }
 
-
-    public void refreshScreen(){
+    /**
+     * Function which refreshes the screen
+     * */
+    public void refreshScreen() {
         Platform.runLater(() -> {
             try {
-                refreshScreenGeneral(notYourTurnLabel,getGamePositions().size());
+                refreshScreenGeneral(notYourTurnLabel, getGamePositions().size());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -144,19 +163,41 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
 
     }
 
-    public void loadImages(){
+    /**
+     * Function which loads the images
+     * */
+    public void loadImages() {
         setImages(new ArrayList<>());
-        getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
-        getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
-        getImages().add(path + "\\DS-Client\\images-set1\\android_studio.JPG");
-        getImages().add(path + "\\DS-Client\\images-set1\\apple_logo.JPG");
-        getImages().add(path + "\\DS-Client\\images-set1\\chrome_logo.JPG");
-        getImages().add(path + "\\DS-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
-        getImages().add(path + "\\DS-Client\\images-set1\\lightroom_logo.PNG");
-        getImages().add(path + "\\DS-Client\\images-set1\\photoshop_logo.PNG");
+        if(getGameTheme() == 1){
+            setClosedFile(new File(path + "\\DS-Client\\images-set1\\closed.png"));
+
+            getImages().add(path + "\\DS-Client\\images-set1\\after_effects_logo.PNG");
+            getImages().add(path + "\\DS-Client\\images-set1\\android_logo.JPG");
+            getImages().add(path + "\\DS-Client\\images-set1\\android_studio.JPG");
+            getImages().add(path + "\\DS-Client\\images-set1\\apple_logo.JPG");
+            getImages().add(path + "\\DS-Client\\images-set1\\chrome_logo.JPG");
+            getImages().add(path + "\\DS-Client\\images-set1\\IntelliJ_IDEA_Logo.JPG");
+            getImages().add(path + "\\DS-Client\\images-set1\\lightroom_logo.PNG");
+            getImages().add(path + "\\DS-Client\\images-set1\\photoshop_logo.PNG");
+        }else if(getGameTheme() == 2){
+            setClosedFile(new File(path + "\\DS-Client\\images-set2\\back.jpg"));
+            getImages().add(path + "\\DS-Client\\images-set2\\1.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\2.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\3.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\4.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\5.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\6.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\7.jpg");
+            getImages().add(path + "\\DS-Client\\images-set2\\8.jpg");
+        }
+
+
     }
 
-    public void addAllButtonsToList(){
+    /**
+     * Function which adds all buttons to a list
+     * */
+    public void addAllButtonsToList() {
         setButtons(new ArrayList<>());
         getButtons().add(button1);
         getButtons().add(button2);
@@ -176,14 +217,10 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
         getButtons().add(button16);
     }
 
-
-
-
-
-
-
-
-    public void registerCallback(){
+    /**
+     * Function which registers a callback on the app server
+     * */
+    public void registerCallback() {
         try {
             setCallbackObj(new CallbackClientImpl(this));
 
@@ -194,23 +231,27 @@ public class GameScreen4X4Controller extends GameScreen implements Initializable
     }
 
 
+    /**
+     * Function which lets the user go back to the previous screen
+     * */
     public void goBack(ActionEvent actionEvent) throws IOException {
-        if(!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)){
+        if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
-        }else{
+        } else {
             goBackGeneral(actionEvent);
         }
 
     }
 
+    /**
+     * Function which sets the game theme text
+     * */
     public String setGameThemeText(int gameTheme) {
         if (gameTheme == 1) {
             return "Software - theme";
         }
-        return "Second - theme";
+        return "World Peace - theme";
     }
-
-
 
 
 }

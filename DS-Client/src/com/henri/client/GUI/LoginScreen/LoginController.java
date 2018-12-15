@@ -3,6 +3,7 @@ package com.henri.client.GUI.LoginScreen;
 import com.henri.client.GUI.GameDashboard.GameDashboardScreenController;
 import com.henri.client.GUI.MainClient;
 import com.henri.client.GUI.SendBack;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,13 +22,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class LoginController extends SendBack implements Initializable {
+public class LoginController extends SendBack {
 
     private Scene gameDashboardScene;
 
@@ -49,16 +51,10 @@ public class LoginController extends SendBack implements Initializable {
     @FXML
     private AnchorPane ap;
 
-
-    public void setGameScene(Scene gameScene) {
-        this.gameDashboardScene = gameScene;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources){
-        onClose(ap, MainClient.clientId);
-    }
-
+    /**
+     * Function which acts on the event triggered by pressing on the login button
+     * @param actionEvent The event tied to the login button
+     * */
     public void login(ActionEvent actionEvent) throws IOException, NoSuchAlgorithmException {
 
         String name = username.getText();
@@ -71,11 +67,12 @@ public class LoginController extends SendBack implements Initializable {
         String response = MainClient.impl.setupMessage(name, passwordHashed);
 
 
-        if (response.equals("false")) {
+        if (response.equals("-1")) {
             credentialsLabel.setText("Credentials Incorrect");
             credentialsLabel.setVisible(true);
         } else {
             MainClient.username = username.getText();
+            MainClient.userId = Integer.parseInt(response);
             String sessionConfig = MainClient.impl.acquireSessionId(name);
             ArrayList<String> sessionConfigList = new ArrayList<>(Arrays.asList(sessionConfig.split("\\s*,\\s*")));
             MainClient.sessionIdentifier_Id = Integer.parseInt(sessionConfigList.get(0));
@@ -88,6 +85,15 @@ public class LoginController extends SendBack implements Initializable {
 
             Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
             primaryStage.setScene(gameDashboardScene);
+            primaryStage.setOnCloseRequest(event -> {
+                try {
+                    MainClient.implDispatch.remove(MainClient.clientId);
+                    Platform.exit();
+                    System.exit(0);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            });
             primaryStage.setTitle("Memory Game");
             //primaryStage.getIcons(new Image("com/henri/client/GUI/icon.png"));
             primaryStage.getIcons().add(new Image("com/henri/client/GUI/icon.png"));
@@ -96,12 +102,23 @@ public class LoginController extends SendBack implements Initializable {
 
     }
 
-    public void goBack(ActionEvent actionEvent) throws IOException{
+    /**
+     * Function which enables the user to go bac to the home screen
+     * @param actionEvent The event tied to the back button
+     * */
+    public void goBack(ActionEvent actionEvent) throws IOException {
         FXMLLoader homeScreenLoader = new FXMLLoader(getClass().getClassLoader().getResource("com/henri/client/GUI/HomeScreen/HomeScreen.fxml"));
         Parent homeScreenPane = homeScreenLoader.load();
         Scene homeScreenScene = new Scene(homeScreenPane);
 
         Stage primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                MainClient.implDispatch.remove(MainClient.clientId);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         primaryStage.setScene(homeScreenScene);
     }
 

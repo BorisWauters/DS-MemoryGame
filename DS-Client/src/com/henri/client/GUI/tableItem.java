@@ -3,12 +3,15 @@ package com.henri.client.GUI;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Class which contains the properties of a row in the table view with the top users
+ * */
 public class tableItem {
 
     private SimpleStringProperty score;
     private SimpleStringProperty username;
 
-    public tableItem(String username, String score){
+    public tableItem(String username, String score) {
         this.username = new SimpleStringProperty(username);
         this.score = new SimpleStringProperty(score);
     }

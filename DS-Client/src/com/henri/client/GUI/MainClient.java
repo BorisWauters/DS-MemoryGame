@@ -1,28 +1,37 @@
 package com.henri.client.GUI;
 
 import com.henri.Dispatcher.DispatcherInterface;
-import com.henri.RMI.Server.AppServerInterface;
+import com.henri.Server.AppServerInterface;
+import com.henri.Server.Game;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Random;
 
-
+/**
+ * Class which starts the client application
+ * */
 public class MainClient extends Application {
 
     public static AppServerInterface impl;
     public static DispatcherInterface implDispatch;
+    public static Registry registryServer;
     public static String sessionIdentifier;
     public static String username;
+    public static int userId;
     public static int sessionIdentifier_Id;
     public static int clientId;
+    public static Game game;
 
     /**
      * Method used to display HomeScreen.
@@ -42,10 +51,22 @@ public class MainClient extends Application {
         primaryStage.setTitle("Memory Game");
         primaryStage.getIcons().add(new Image("com/henri/client/GUI/icon.png"));
         primaryStage.setScene(homeScene);
+        primaryStage.setOnCloseRequest(event -> {
+            try {
+                MainClient.implDispatch.remove(MainClient.clientId);
+                Platform.exit();
+                System.exit(0);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
         primaryStage.show();
     }
 
-    private void startClient() throws RemoteException {
+    /**
+     * Function which creates the RMI communication channels
+     * */
+    private void startClient() throws RemoteException, NotBoundException {
         Random rand = new Random();
         clientId = rand.nextInt(100000);
 
@@ -63,15 +84,15 @@ public class MainClient extends Application {
         }
 
         //request AppServer to connect to
-        int port = implDispatch.setup(clientId);
+        ArrayList<Integer> result = implDispatch.setup(clientId);
 
         try {
             // fire to localhost on port 1099
-            Registry registryServer = LocateRegistry.getRegistry("localhost", port);
+            registryServer = LocateRegistry.getRegistry("localhost", result.get(0));
 
             // search AppServer
-            impl = (AppServerInterface) registryServer.lookup("AppServerImplService");
-
+            impl = (AppServerInterface) registryServer.lookup(String.valueOf(result.get(1)));
+            System.out.println("CHECK: app server: " + result.get(0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,7 +104,7 @@ public class MainClient extends Application {
      *
      * @param args
      */
-    public static void main(String[] args) throws RemoteException {
+    public static void main(String[] args) throws RemoteException, NotBoundException {
         MainClient mainClient = new MainClient();
         mainClient.startClient();
         launch(args);
