@@ -1,5 +1,6 @@
 package com.henri.client.RMI;
 
+import com.henri.client.GUI.GameScreen.GameScreen;
 import com.henri.client.GUI.GameScreen4X4.GameScreen4X4Controller;
 import com.henri.client.GUI.GameScreen4X6.GameScreen4X6Controller;
 import com.henri.client.GUI.GameScreen6X6.GameScreen6X6Controller;
@@ -70,6 +71,21 @@ public class CallbackClientImpl extends UnicastRemoteObject implements CallbackC
             controller4X6.refreshScreen();
         }
 
+    }
+
+    @Override
+    public void sendMessage(String message, String username, int controllerType){
+
+        if (controllerType == 1) {
+            GameScreen4X4Controller controller4X4 = (GameScreen4X4Controller) controller;
+            controller4X4.updateChat(message, username);
+        } else if (controllerType == 2) {
+            GameScreen6X6Controller controller6X6 = (GameScreen6X6Controller) controller;
+            controller6X6.updateChat(message, username);
+        } else if (controllerType == 3) {
+            GameScreen4X6Controller controller4X6 = (GameScreen4X6Controller) controller;
+            controller4X6.updateChat(message, username);
+        }
     }
 
 }

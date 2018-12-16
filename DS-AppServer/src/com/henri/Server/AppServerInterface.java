@@ -227,4 +227,6 @@ public interface AppServerInterface extends Remote {
      * */
     void leaveGame(int gameId) throws RemoteException;
 
+    void sendMessage(String message, String username, int gameId, int controllerType) throws  RemoteException;
+
 }

@@ -19,4 +19,6 @@ public interface CallbackClientInterface extends java.rmi.Remote {
      * @param controllerType The type of the controller on which the game is running
      * */
     void refreshScreen(int controllerType) throws RemoteException;
+
+    void sendMessage(String message, String username, int controllerType) throws  RemoteException;
 }

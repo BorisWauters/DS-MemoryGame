@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -38,7 +39,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
     private Button button21, button22, button23, button24, button25, button26, button27, button28, button29;
 
     @FXML
-    private Button button30, button31, button32, button33, button34, button35, button36;
+    private Button button30, button31, button32, button33, button34, button35, button36, sendButton;
 
     @FXML
     private AnchorPane ap;
@@ -54,6 +55,9 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private TextArea chatField, inputField;
 
     /**
      * Function which initializes the view (load images, try joining the game, requesting game configuration..)
@@ -118,6 +122,8 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
             if (isViewOnly()) {
                 notYourTurnLabel.setText("You are in view only mode!");
             }
+
+            chatField.setDisable(true);
 
         });
 
@@ -275,7 +281,7 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
      * Function which lets the user go back to the previous screen
      * */
     public void goBack(ActionEvent actionEvent) throws IOException {
-        MainClient.impl.leaveGame(getGameId());
+        //MainClient.impl.leaveGame(getGameId());
         if (!MainClient.impl.checkSessionIdentifier(MainClient.sessionIdentifier_Id, MainClient.sessionIdentifier)) {
             sendBackToLogin(actionEvent);
         } else {
@@ -292,6 +298,19 @@ public class GameScreen6X6Controller extends GameScreen implements Initializable
             return "Software - theme";
         }
         return "Second - theme";
+    }
+
+    public void sendMessage(ActionEvent event) throws RemoteException{
+        if(!inputField.getText().equals(""))
+            sendMessageGeneral(inputField.getText());
+
+    }
+
+    public void updateChat(String message, String username){
+        String currentText = chatField.getText();
+        currentText = currentText + "\n" + username + ": " + message;
+        chatField.setText(currentText);
+        inputField.clear();
     }
 
 }

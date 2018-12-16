@@ -404,6 +404,16 @@ public class AppServerImpl extends UnicastRemoteObject implements AppServerInter
         //impl.leaveGame(gameId);
     }
 
+    @Override
+    public void sendMessage(String message, String username, int gameId, int controllerType) throws RemoteException {
+        for(Map.Entry<Integer, ArrayList<Object>> entry : clientList.entrySet()){
+            if((int)entry.getValue().get(0) == gameId){
+                CallbackClientInterface callbackClientObject = (CallbackClientInterface) entry.getValue().get(1);
+                callbackClientObject.sendMessage(message, username, controllerType);
+            }
+        }
+    }
+
     /**
      * Function which creates an list which contains the configuration of the game
      *

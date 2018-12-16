@@ -6,12 +6,14 @@ import com.henri.client.RMI.CallbackClientImpl;
 import com.henri.client.RMI.CallbackClientInterface;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -51,6 +53,8 @@ public class GameScreen extends SendBack {
     private Button pressedButton = null;
 
     private CallbackClientInterface callbackObj;
+
+
 
     /**
      * Function which removes the callback from the App Server.
@@ -402,6 +406,10 @@ public class GameScreen extends SendBack {
         }
     }
 
+    public void sendMessageGeneral(String message) throws RemoteException{
+        MainClient.impl.sendMessage(message,MainClient.username,gameId, controllerType);
+    }
+
 
     //GETTERS AND SETTERS
     public int getControllerId() {
@@ -555,4 +563,6 @@ public class GameScreen extends SendBack {
     public void setControllerType(int controllerType) {
         this.controllerType = controllerType;
     }
+
+
 }

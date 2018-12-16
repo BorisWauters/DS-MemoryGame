@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -36,7 +37,7 @@ public class GameScreen4X6Controller extends GameScreen implements Initializable
     private Button button11, button12, button13, button14, button15, button16, button17, button18, button19, button20;
 
     @FXML
-    private Button button21, button22, button23, button24;
+    private Button button21, button22, button23, button24, sendButton;
 
     @FXML
     private AnchorPane ap;
@@ -52,6 +53,9 @@ public class GameScreen4X6Controller extends GameScreen implements Initializable
 
     @FXML
     private Button backButton;
+
+    @FXML
+    private TextArea chatField, inputField;
 
     /**
      * Function which initializes the view (load images, try joining the game, requesting game configuration..)
@@ -115,6 +119,8 @@ public class GameScreen4X6Controller extends GameScreen implements Initializable
             if (isViewOnly()) {
                 notYourTurnLabel.setText("You are in view only mode!");
             }
+
+            chatField.setDisable(true);
 
         });
 
@@ -262,6 +268,19 @@ public class GameScreen4X6Controller extends GameScreen implements Initializable
             return "Software - theme";
         }
         return "World Peace - theme";
+    }
+
+    public void sendMessage(ActionEvent event) throws RemoteException{
+        if(!inputField.getText().equals(""))
+            sendMessageGeneral(inputField.getText());
+
+    }
+
+    public void updateChat(String message, String username){
+        String currentText = chatField.getText();
+        currentText = currentText + "\n" + username + ": " + message;
+        chatField.setText(currentText);
+        inputField.clear();
     }
 
 
